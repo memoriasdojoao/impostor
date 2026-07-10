@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>Impostor Médico</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    background: radial-gradient(circle at 50% 0%, #16283a 0%, #0b1520 55%, #070d14 100%);
+    font-family: 'IBM Plex Mono', monospace;
+    color: #e8eef2;
+  }
+
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  .wrap { width: 100%; max-width: 420px; }
+
+  .font-display { font-family: 'Spectral', serif; }
+
+  .pulse-svg { color: #5fb3a3; width: 100%; height: 32px; margin-bottom: 12px; }
+  .pulse-anim { stroke-dasharray: 300; stroke-dashoffset: 300; animation: pulseMove 2.4s linear infinite; }
+  @keyframes pulseMove { to { stroke-dashoffset: 0; } }
+
+  .card {
+    background: #131f2c;
+    border: 1px solid #24384a;
+    border-radius: 10px;
+    padding: 24px;
+  }
+  .card.center { text-align: center; }
+
+  .eyebrow {
+    display: flex; align-items: center; gap: 8px;
+    color: #5fb3a3; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 8px; justify-content: flex-start;
+  }
+  .card.center .eyebrow { justify-content: center; }
+
+  h1.title { font-size: 30px; margin: 0 0 4px; color: #fff; letter-spacing: -0.01em; }
+  h2.title { font-size: 24px; margin: 0 0 12px; color: #fff; }
+  p.sub { font-size: 14px; color: #8fa6b8; margin: 0 0 24px; line-height: 1.5; }
+
+  .row-between { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .row-label { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #c8d4dd; }
+
+  .counter { display: flex; align-items: center; gap: 12px; }
+  .counter button {
+    width: 32px; height: 32px; border-radius: 50%; border: none; background: #24384a;
+    color: #fff; font-size: 18px; cursor: pointer;
+  }
+  .counter span { width: 24px; text-align: center; font-family: 'Spectral', serif; font-size: 18px; color: #fff; }
+
+  .level-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
+  .level-btn {
+    font-size: 12px; padding: 8px 4px; border-radius: 6px; border: none; cursor: pointer;
+    background: #1a2a38; color: #8fa6b8; font-family: 'IBM Plex Mono', monospace;
+  }
+  .level-btn.active { background: #5fb3a3; color: #0b1520; font-weight: 600; }
+
+  details { margin-bottom: 24px; }
+  summary { font-size: 14px; color: #5fb3a3; cursor: pointer; }
+  .names-list { margin-top: 12px; max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; }
+  .names-list input {
+    width: 100%; font-size: 14px; padding: 8px 12px; border-radius: 6px;
+    background: #0e1822; color: #e8eef2; border: 1px solid #24384a; font-family: inherit;
+  }
+
+  button.btn {
+    width: 100%; padding: 14px; border-radius: 8px; border: none; cursor: pointer;
+    font-family: 'Spectral', serif; font-size: 18px; display: flex; align-items: center;
+    justify-content: center; gap: 8px;
+  }
+  .btn-primary { background: #c1432e; color: #fdf6ee; }
+  .btn-accent { background: #5fb3a3; color: #0b1520; }
+  .btn-muted { background: #24384a; color: #e8eef2; }
+
+  .btn-row { display: flex; gap: 8px; }
+  .btn-row .btn { flex: 1; }
+  .btn-square { padding: 0 16px; border-radius: 8px; border: none; background: #24384a; color: #e8eef2; cursor: pointer; }
+
+  .paper {
+    background: #fdf6ee; border-radius: 8px; padding: 24px; margin-bottom: 20px;
+  }
+  .paper.doctor { border: 2px solid #5fb3a3; }
+  .paper.impostor { border: 2px dashed #c1432e; }
+  .paper .eyebrow2 { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #7a8f85; margin-bottom: 8px; }
+  .paper .diag { font-family: 'Spectral', serif; font-size: 24px; color: #1f2d27; }
+  .paper .note { font-size: 14px; color: #5a6f65; margin-top: 16px; line-height: 1.5; }
+
+  .stamp {
+    display: inline-block; padding: 10px 18px; border: 3px solid #c1432e; border-radius: 6px;
+    color: #c1432e; font-family: 'Spectral', serif; font-size: 24px; letter-spacing: 0.06em;
+    transform: rotate(-8deg); animation: stampIn 0.45s cubic-bezier(.2,.8,.3,1.2) forwards;
+  }
+  @keyframes stampIn {
+    0% { transform: scale(2.6) rotate(-18deg); opacity: 0; }
+    60% { transform: scale(0.92) rotate(-8deg); opacity: 1; }
+    100% { transform: scale(1) rotate(-8deg); opacity: 1; }
+  }
+
+  .announce-box {
+    background: #fdf6ee; border: 2px solid #5fb3a3; border-radius: 8px;
+    padding: 24px; margin-bottom: 24px;
+  }
+  .announce-box .eyebrow2 { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #7a8f85; margin-bottom: 8px; }
+  .announce-box .name { font-family: 'Spectral', serif; font-size: 30px; color: #1f2d27; }
+
+  .starter-box {
+    background: #1a2a38; border: 1px solid #2c4257; border-radius: 8px;
+    padding: 12px 16px; margin-bottom: 20px; text-align: center;
+  }
+  .starter-box .eyebrow2 { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #7a8f95; margin-bottom: 4px; }
+  .starter-box .name { font-family: 'Spectral', serif; font-size: 20px; color: #f2b880; }
+  .starter-box .hint { font-size: 12px; color: #5a7285; margin-top: 4px; }
+
+  .timer { font-family: 'Spectral', serif; font-size: 60px; text-align: center; margin-bottom: 20px; }
+
+  .footer-note { text-align: center; font-size: 12px; color: #3f5568; margin-top: 16px; }
+
+  input:focus, button:focus { outline: 2px solid #5fb3a3; outline-offset: 2px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <svg class="pulse-svg" viewBox="0 0 300 40" preserveAspectRatio="none">
+      <polyline class="pulse-anim" points="0,20 60,20 75,20 85,4 95,36 105,20 120,20 140,20 150,10 160,30 170,20 190,20 300,20"
+        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+    <div id="app"></div>
+    <p class="footer-note">Un solo teléfono, pásenlo por turnos. Nadie debe ver la ficha de otro.</p>
+  </div>
+
+<script>
+const DISEASES = [
+  { name: "Diabetes", level: "facil" },
+  { name: "Hipertensión", level: "facil" },
+  { name: "Asma", level: "facil" },
+  { name: "Migraña", level: "facil" },
+  { name: "Anemia", level: "facil" },
+  { name: "Varicela", level: "facil" },
+  { name: "Gripe", level: "facil" },
+  { name: "Neumonía", level: "facil" },
+  { name: "Apendicitis", level: "facil" },
+  { name: "Conjuntivitis", level: "facil" },
+  { name: "Amigdalitis", level: "facil" },
+  { name: "Otitis", level: "facil" },
+  { name: "Gastritis", level: "facil" },
+  { name: "Bronquitis", level: "facil" },
+  { name: "Sarampión", level: "facil" },
+  { name: "Dermatitis", level: "facil" },
+  { name: "Insomnio", level: "facil" },
+  { name: "Obesidad", level: "facil" },
+  { name: "Alergia alimentaria", level: "facil" },
+  { name: "Resfriado común", level: "facil" },
+  { name: "Artritis reumatoide", level: "intermedio" },
+  { name: "Hipotiroidismo", level: "intermedio" },
+  { name: "Hipertiroidismo", level: "intermedio" },
+  { name: "Osteoporosis", level: "intermedio" },
+  { name: "Colitis ulcerosa", level: "intermedio" },
+  { name: "Epilepsia", level: "intermedio" },
+  { name: "Cálculos renales", level: "intermedio" },
+  { name: "Úlcera péptica", level: "intermedio" },
+  { name: "Cirrosis hepática", level: "intermedio" },
+  { name: "Fibromialgia", level: "intermedio" },
+  { name: "Psoriasis", level: "intermedio" },
+  { name: "Vértigo posicional", level: "intermedio" },
+  { name: "Reflujo gastroesofágico", level: "intermedio" },
+  { name: "Tendinitis", level: "intermedio" },
+  { name: "Escoliosis", level: "intermedio" },
+  { name: "Sinusitis crónica", level: "intermedio" },
+  { name: "Varices", level: "intermedio" },
+  { name: "Cataratas", level: "intermedio" },
+  { name: "Glaucoma", level: "intermedio" },
+  { name: "Anorexia nerviosa", level: "intermedio" },
+  { name: "Lupus eritematoso", level: "dificil" },
+  { name: "Esclerosis múltiple", level: "dificil" },
+  { name: "Enfermedad de Crohn", level: "dificil" },
+  { name: "Fibrosis quística", level: "dificil" },
+  { name: "Síndrome de Guillain-Barré", level: "dificil" },
+  { name: "Enfermedad de Parkinson", level: "dificil" },
+  { name: "Enfermedad de Alzheimer", level: "dificil" },
+  { name: "Miastenia gravis", level: "dificil" },
+  { name: "Hemofilia", level: "dificil" },
+  { name: "Anemia falciforme", level: "dificil" },
+  { name: "Enfermedad de Wilson", level: "dificil" },
+  { name: "Síndrome de Cushing", level: "dificil" },
+  { name: "Enfermedad de Addison", level: "dificil" },
+  { name: "Espondilitis anquilosante", level: "dificil" },
+  { name: "Síndrome de Sjögren", level: "dificil" },
+  { name: "Enfermedad de Graves", level: "dificil" },
+  { name: "Amiloidosis", level: "dificil" },
+  { name: "Porfiria", level: "dificil" },
+];
+const LEVEL_LABEL = { facil: "Fácil", intermedio: "Intermedio", dificil: "Difícil", todas: "Todas" };
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+let state = {
+  phase: "setup",
+  playerCount: 10,
+  names: Array.from({ length: 10 }, (_, i) => (i === 9 ? "Jugador 10 (extra)" : `Jugador ${i + 1}`)),
+  level: "todas",
+  currentIndex: 0,
+  revealed: false,
+  disease: null,
+  impostorIndex: null,
+  starterIndex: null,
+  seconds: 90,
+  running: false,
+  resultShown: false,
+};
+let timerInterval = null;
+
+function set(partial) {
+  Object.assign(state, partial);
+  render();
+}
+
+function ensureNamesLength() {
+  const next = [...state.names];
+  while (next.length < state.playerCount) next.push(`Jugador ${next.length + 1}`);
+  set({ names: next.slice(0, state.playerCount) });
+}
+
+function startGame() {
+  const pool = state.level === "todas" ? DISEASES : DISEASES.filter(d => d.level === state.level);
+  const chosen = shuffle(pool)[0];
+  const impostor = Math.floor(Math.random() * state.playerCount);
+  const starter = Math.floor(Math.random() * state.playerCount);
+  clearInterval(timerInterval);
+  set({
+    disease: chosen.name,
+    impostorIndex: impostor,
+    starterIndex: starter,
+    currentIndex: 0,
+    revealed: false,
+    seconds: 90,
+    running: false,
+    resultShown: false,
+    phase: "announce",
+  });
+}
+
+function nextPlayer() {
+  if (state.currentIndex + 1 < state.playerCount) {
+    set({ currentIndex: state.currentIndex + 1, revealed: false });
+  } else {
+    set({ phase: "discussion" });
+  }
+}
+
+function toggleTimer() {
+  if (!state.running) {
+    set({ running: true });
+    timerInterval = setInterval(() => {
+      if (state.seconds <= 0) { clearInterval(timerInterval); set({ running: false }); return; }
+      set({ seconds: state.seconds - 1 });
+    }, 1000);
+  } else {
+    clearInterval(timerInterval);
+    set({ running: false });
+  }
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  set({ seconds: 90, running: false });
+}
+
+function fullReset() {
+  clearInterval(timerInterval);
+  set({ phase: "setup", disease: null, impostorIndex: null, starterIndex: null });
+}
+
+function fmtTime(s) {
+  const m = String(Math.floor(s / 60)).padStart(2, "0");
+  const ss = String(s % 60).padStart(2, "0");
+  return `${m}:${ss}`;
+}
+
+function render() {
+  const app = document.getElementById("app");
+  const s = state;
+
+  if (s.phase === "setup") {
+    app.innerHTML = `
+      <div class="card">
+        <div class="eyebrow">🩺 <span>Historia clínica · Sala de espera</span></div>
+        <h1 class="title font-display">Impostor Médico</h1>
+        <p class="sub">9 jugadores reciben el diagnóstico. 1 impostor no sabe nada. Pasen el mismo teléfono, uno por uno.</p>
+
+        <div class="row-between">
+          <span class="row-label">👥 Jugadores</span>
+          <div class="counter">
+            <button id="dec">−</button>
+            <span class="font-display">${s.playerCount}</span>
+            <button id="inc">+</button>
+          </div>
+        </div>
+
+        <div>
+          <span class="row-label" style="margin-bottom:8px; display:flex;">📋 Dificultad del diagnóstico</span>
+          <div class="level-grid">
+            ${["todas","facil","intermedio","dificil"].map(lv => `
+              <button class="level-btn ${s.level===lv?'active':''}" data-level="${lv}">${LEVEL_LABEL[lv]}</button>
+            `).join("")}
+          </div>
+        </div>
+
+        <details>
+          <summary>Editar nombres de los jugadores (opcional)</summary>
+          <div class="names-list">
+            ${s.names.map((n,i) => `<input data-idx="${i}" value="${n.replace(/"/g,'&quot;')}" />`).join("")}
+          </div>
+        </details>
+
+        <button class="btn btn-primary" id="startBtn">🔀 Repartir diagnóstico</button>
+      </div>
+    `;
+    app.querySelector("#dec").onclick = () => { set({ playerCount: Math.max(4, s.playerCount - 1) }); ensureNamesLength(); };
+    app.querySelector("#inc").onclick = () => { set({ playerCount: Math.min(14, s.playerCount + 1) }); ensureNamesLength(); };
+    app.querySelectorAll(".level-btn").forEach(b => b.onclick = () => set({ level: b.dataset.level }));
+    app.querySelectorAll(".names-list input").forEach(inp => inp.oninput = (e) => {
+      const idx = Number(e.target.dataset.idx);
+      const next = [...state.names]; next[idx] = e.target.value; state.names = next;
+    });
+    app.querySelector("#startBtn").onclick = startGame;
+  }
+
+  else if (s.phase === "announce") {
+    app.innerHTML = `
+      <div class="card center">
+        <div class="eyebrow">❤️ <span>Antes de repartir las fichas</span></div>
+        <p class="sub">Ya quedó sorteado quién abre la ronda de pistas más tarde. Anúncienlo en voz alta para que todos lo sepan de antemano.</p>
+        <div class="announce-box">
+          <div class="eyebrow2">Empieza hablando</div>
+          <div class="name">${s.names[s.starterIndex]}</div>
+        </div>
+        <button class="btn btn-accent" id="toReveal">Empezar a repartir fichas →</button>
+      </div>
+    `;
+    app.querySelector("#toReveal").onclick = () => set({ phase: "reveal" });
+  }
+
+  else if (s.phase === "reveal") {
+    const isImpostor = s.currentIndex === s.impostorIndex;
+    app.innerHTML = `
+      <div class="card center">
+        <div class="eyebrow" style="justify-content:center;">Paciente ${s.currentIndex + 1} de ${s.playerCount}</div>
+        <h2 class="title font-display">Entrega el teléfono a<br><span style="color:#f2b880">${s.names[s.currentIndex]}</span></h2>
+        ${!s.revealed ? `
+          <button class="btn btn-accent" id="revealBtn">👁 Ver mi ficha médica</button>
+        ` : `
+          ${isImpostor ? `
+            <div class="paper impostor">
+              📎
+              <div><span class="stamp">SIN DIAGNÓSTICO</span></div>
+              <p class="note">Eres el <strong>IMPOSTOR</strong>. No conoces la enfermedad: improvisa con lo que digan los demás y no te delates.</p>
+            </div>
+          ` : `
+            <div class="paper doctor">
+              📎
+              <div class="eyebrow2">Diagnóstico confirmado</div>
+              <div class="diag">${s.disease}</div>
+              <p class="note">Da pistas sobre esta enfermedad sin decir su nombre. Ayuda a descubrir al impostor.</p>
+            </div>
+          `}
+          <button class="btn btn-muted" id="nextBtn">🙈 Ocultar y pasar el teléfono →</button>
+        `}
+      </div>
+    `;
+    if (!s.revealed) {
+      app.querySelector("#revealBtn").onclick = () => set({ revealed: true });
+    } else {
+      app.querySelector("#nextBtn").onclick = nextPlayer;
+    }
+  }
+
+  else if (s.phase === "discussion") {
+    app.innerHTML = `
+      <div class="card center">
+        <div class="eyebrow" style="justify-content:center;">💓 <span>Sala de discusión</span></div>
+        <h2 class="title font-display">Den pistas y debatan quién es el impostor</h2>
+        <div class="starter-box">
+          <div class="eyebrow2">Empieza a dar la primera pista</div>
+          <div class="name">${s.names[s.starterIndex]}</div>
+          <div class="hint">Después se sigue por orden, en ronda, hacia la derecha.</div>
+        </div>
+        <div class="timer" style="color:${s.seconds===0?'#c1432e':'#f2b880'}">${fmtTime(s.seconds)}</div>
+        ${s.seconds === 0
+          ? `<p class="sub" style="color:#c1432e;">¡Tiempo terminado! Voten ahora, a la cuenta de tres.</p>`
+          : `<p class="sub">Nadie dice el nombre de la enfermedad en voz alta.</p>`
+        }
+        <div class="btn-row" style="margin-bottom:12px;">
+          <button class="btn btn-accent" id="timerToggle">${s.running ? "⏸ Pausar" : "▶ Iniciar"}</button>
+          <button class="btn-square" id="timerReset">🔄</button>
+        </div>
+        <button class="btn btn-primary" id="toVote">Ir a votación</button>
+      </div>
+    `;
+    app.querySelector("#timerToggle").onclick = toggleTimer;
+    app.querySelector("#timerReset").onclick = resetTimer;
+    app.querySelector("#toVote").onclick = () => { clearInterval(timerInterval); set({ phase: "result" }); };
+  }
+
+  else if (s.phase === "result") {
+    app.innerHTML = `
+      <div class="card center">
+        <div style="font-size:20px; margin-bottom:8px;">⏱</div>
+        <h2 class="title font-display">Votación</h2>
+        <p class="sub">Todos señalan a la cuenta de tres a quien creen impostor. Cuando quieran confirmar, revelen la ficha final.</p>
+        ${!s.resultShown ? `
+          <button class="btn btn-primary" id="revealFinal">Revelar impostor</button>
+        ` : `
+          <div class="paper impostor">
+            <div class="eyebrow2">El impostor era</div>
+            <div class="diag" style="margin-bottom:12px;">${s.names[s.impostorIndex]}</div>
+            <div class="eyebrow2">La enfermedad era</div>
+            <div class="diag" style="color:#c1432e;">${s.disease}</div>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-accent" id="againBtn">🔀 Otra ronda</button>
+            <button class="btn btn-muted" id="newBtn">Nueva partida</button>
+          </div>
+        `}
+      </div>
+    `;
+    if (!s.resultShown) {
+      app.querySelector("#revealFinal").onclick = () => set({ resultShown: true });
+    } else {
+      app.querySelector("#againBtn").onclick = startGame;
+      app.querySelector("#newBtn").onclick = fullReset;
+    }
+  }
+}
+
+render();
+</script>
+</body>
+</html>
