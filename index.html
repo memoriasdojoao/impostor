@@ -58,8 +58,8 @@
     width: 30px; height: 30px; border-radius: 8px;
     background: linear-gradient(160deg,#1c3245,#0c1620);
     border: 1px solid #2c4257;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 15px;
+    object-fit: cover;
+    display: block;
   }
   #topbar .brand { display: flex; flex-direction: column; line-height: 1.15; }
   #topbar .brand b { font-family: 'Spectral', serif; font-size: 15px; color: #fff; font-weight: 600; }
@@ -316,12 +316,14 @@ function shuffle(arr) {
 let state = {
   phase: "setup",
   playerCount: 10,
+  impostorCount: 1,
+  discussionSeconds: 90,
   names: Array.from({ length: 10 }, (_, i) => (i === 9 ? "Jugador 10 (extra)" : `Jugador ${i + 1}`)),
   level: "todas",
   currentIndex: 0,
   revealed: false,
   disease: null,
-  impostorIndex: null,
+  impostorIndices: [],
   starterIndex: null,
   announceRevealed: false,
   seconds: 90,
@@ -344,17 +346,18 @@ function ensureNamesLength() {
 function startGame() {
   const pool = state.level === "todas" ? DISEASES : DISEASES.filter(d => d.level === state.level);
   const chosen = shuffle(pool)[0];
-  const impostor = Math.floor(Math.random() * state.playerCount);
+  const order = shuffle(Array.from({ length: state.playerCount }, (_, i) => i));
+  const impostors = order.slice(0, state.impostorCount);
   const starter = Math.floor(Math.random() * state.playerCount);
   clearInterval(timerInterval);
   set({
     disease: chosen.name,
-    impostorIndex: impostor,
+    impostorIndices: impostors,
     starterIndex: starter,
     announceRevealed: false,
     currentIndex: 0,
     revealed: false,
-    seconds: 90,
+    seconds: state.discussionSeconds,
     running: false,
     resultShown: false,
     phase: "announce",
@@ -385,12 +388,12 @@ function toggleTimer() {
 
 function resetTimer() {
   clearInterval(timerInterval);
-  set({ seconds: 90, running: false });
+  set({ seconds: state.discussionSeconds, running: false });
 }
 
 function fullReset() {
   clearInterval(timerInterval);
-  set({ phase: "setup", disease: null, impostorIndex: null, starterIndex: null, announceRevealed: false });
+  set({ phase: "setup", disease: null, impostorIndices: [], starterIndex: null, announceRevealed: false });
 }
 
 function fmtTime(s) {
@@ -445,7 +448,7 @@ function renderTopbar() {
     }).join("")}</div>`;
   }
   top.innerHTML = `
-    <div class="logo">🩺</div>
+    <img class="logo" src="icon-192.png" alt="Impostor Médico" />
     <div class="brand"><b>Impostor Médico</b><span>Historia clínica</span></div>
     <div class="right">
       ${dots}
@@ -474,7 +477,7 @@ function render() {
         ${pulseSvg()}
         <div class="eyebrow">🩺 <span>Sala de espera</span></div>
         <h1 class="title font-display">Impostor Médico</h1>
-        <p class="sub">9 jugadores reciben el diagnóstico. 1 impostor no sabe nada. Pasen el mismo teléfono, uno por uno.</p>
+        <p class="sub">${s.playerCount - s.impostorCount} jugador${s.playerCount - s.impostorCount === 1 ? '' : 'es'} reciben el diagnóstico. ${s.impostorCount} impostor${s.impostorCount === 1 ? ' no sabe' : 'es no saben'} nada. Pasen el mismo teléfono, uno por uno.</p>
 
         <div class="row-between">
           <span class="row-label">👥 Jugadores</span>
@@ -485,11 +488,29 @@ function render() {
           </div>
         </div>
 
+        <div class="row-between">
+          <span class="row-label">🎭 Impostores</span>
+          <div class="counter">
+            <button id="impDec">−</button>
+            <span class="font-display">${s.impostorCount}</span>
+            <button id="impInc">+</button>
+          </div>
+        </div>
+
         <div>
           <span class="row-label" style="margin-bottom:8px; display:flex;">📋 Dificultad del diagnóstico</span>
           <div class="level-grid">
             ${["todas","facil","intermedio","dificil"].map(lv => `
               <button class="level-btn ${s.level===lv?'active':''}" data-level="${lv}">${LEVEL_LABEL[lv]}</button>
+            `).join("")}
+          </div>
+        </div>
+
+        <div>
+          <span class="row-label" style="margin-bottom:8px; display:flex;">⏱ Tiempo de discusión</span>
+          <div class="level-grid">
+            ${[60,90,120,180].map(sec => `
+              <button class="level-btn ${s.discussionSeconds===sec?'active':''}" data-sec="${sec}">${sec < 120 ? sec+'s' : Math.floor(sec/60)+' min'}</button>
             `).join("")}
           </div>
         </div>
@@ -504,9 +525,13 @@ function render() {
     `;
     actionbar.innerHTML = `<button class="btn btn-primary" id="startBtn">🔀 Repartir diagnóstico</button>`;
 
-    content.querySelector("#dec").onclick = () => { state.playerCount = Math.max(4, state.playerCount - 1); ensureNamesLength(); render(); };
+    const maxImpostors = () => Math.max(1, Math.min(3, state.playerCount - 2));
+    content.querySelector("#dec").onclick = () => { state.playerCount = Math.max(4, state.playerCount - 1); state.impostorCount = Math.min(state.impostorCount, maxImpostors()); ensureNamesLength(); render(); };
     content.querySelector("#inc").onclick = () => { state.playerCount = Math.min(14, state.playerCount + 1); ensureNamesLength(); render(); };
-    content.querySelectorAll(".level-btn").forEach(b => b.onclick = () => set({ level: b.dataset.level }));
+    content.querySelector("#impDec").onclick = () => { state.impostorCount = Math.max(1, state.impostorCount - 1); render(); };
+    content.querySelector("#impInc").onclick = () => { state.impostorCount = Math.min(maxImpostors(), state.impostorCount + 1); render(); };
+    content.querySelectorAll(".level-btn[data-level]").forEach(b => b.onclick = () => set({ level: b.dataset.level }));
+    content.querySelectorAll(".level-btn[data-sec]").forEach(b => b.onclick = () => set({ discussionSeconds: Number(b.dataset.sec) }));
     content.querySelectorAll(".names-list input").forEach(inp => inp.oninput = (e) => {
       state.names[Number(e.target.dataset.idx)] = e.target.value;
     });
@@ -537,7 +562,7 @@ function render() {
   }
 
   else if (s.phase === "reveal") {
-    const isImpostor = s.currentIndex === s.impostorIndex;
+    const isImpostor = s.impostorIndices.includes(s.currentIndex);
     content.innerHTML = `
       <div class="screen center">
         <div class="eyebrow" style="justify-content:center;">Paciente ${s.currentIndex + 1} de ${s.playerCount}</div>
@@ -605,8 +630,8 @@ function render() {
         <p class="sub">Todos señalan a la cuenta de tres a quien creen impostor. Cuando quieran confirmar, revelen la ficha final.</p>
         ${s.resultShown ? `
           <div class="paper impostor">
-            <div class="eyebrow2">El impostor era</div>
-            <div class="diag" style="margin-bottom:12px;">${s.names[s.impostorIndex]}</div>
+            <div class="eyebrow2">${s.impostorIndices.length > 1 ? "Los impostores eran" : "El impostor era"}</div>
+            <div class="diag" style="margin-bottom:12px;">${s.impostorIndices.map(i => s.names[i]).join(" · ")}</div>
             <div class="eyebrow2">La enfermedad era</div>
             <div class="diag" style="color:#c1432e;">${s.disease}</div>
           </div>
