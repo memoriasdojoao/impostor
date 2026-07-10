@@ -2,7 +2,12 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Impostor Médico" />
+<meta name="theme-color" content="#0b1520" />
 <title>Impostor Médico</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
@@ -23,6 +28,8 @@
     align-items: center;
     justify-content: center;
     padding: 16px;
+    padding-top: calc(16px + env(safe-area-inset-top));
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
   }
 
   .wrap { width: 100%; max-width: 420px; }
@@ -224,6 +231,7 @@ let state = {
   disease: null,
   impostorIndex: null,
   starterIndex: null,
+  announceRevealed: false,
   seconds: 90,
   running: false,
   resultShown: false,
@@ -256,6 +264,7 @@ function startGame() {
     seconds: 90,
     running: false,
     resultShown: false,
+    announceRevealed: false,
     phase: "announce",
   });
 }
@@ -350,15 +359,23 @@ function render() {
     app.innerHTML = `
       <div class="card center">
         <div class="eyebrow">❤️ <span>Antes de repartir las fichas</span></div>
-        <p class="sub">Ya quedó sorteado quién abre la ronda de pistas más tarde. Anúncienlo en voz alta para que todos lo sepan de antemano.</p>
-        <div class="announce-box">
-          <div class="eyebrow2">Empieza hablando</div>
-          <div class="name">${s.names[s.starterIndex]}</div>
-        </div>
-        <button class="btn btn-accent" id="toReveal">Empezar a repartir fichas →</button>
+        <p class="sub">Cuando estén todos listos y prestando atención, toca "Começar" para saber quién abre la ronda de pistas.</p>
+        ${!s.announceRevealed ? `
+          <button class="btn btn-accent" id="startTalkBtn">▶ Começar</button>
+        ` : `
+          <div class="announce-box">
+            <div class="eyebrow2">Empieza hablando</div>
+            <div class="name">${s.names[s.starterIndex]}</div>
+          </div>
+          <button class="btn btn-accent" id="toReveal">Empezar a repartir fichas →</button>
+        `}
       </div>
     `;
-    app.querySelector("#toReveal").onclick = () => set({ phase: "reveal" });
+    if (!s.announceRevealed) {
+      app.querySelector("#startTalkBtn").onclick = () => set({ announceRevealed: true });
+    } else {
+      app.querySelector("#toReveal").onclick = () => set({ phase: "reveal" });
+    }
   }
 
   else if (s.phase === "reveal") {
