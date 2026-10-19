@@ -27,7 +27,7 @@ button{font-family:inherit;cursor:pointer}
 .chip{font:600 13px 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--gd);border:1px solid var(--ln);padding:5px 9px;border-radius:6px;display:inline-flex;align-items:center;gap:6px}
 .ib{width:34px;height:34px;border-radius:8px;border:1px solid var(--ln);background:var(--s1);color:var(--tx);display:flex;align-items:center;justify-content:center}
 #prog{height:3px;background:var(--ln)}#prog i{display:block;height:3px;background:var(--gd);transition:width .3s}
-#main{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:20px 16px;width:100%}
+#main{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:20px 16px;width:100%;touch-action:pan-y}
 #act{padding:12px 16px 8px;display:flex;flex-direction:column;gap:10px}
 #by{text-align:center;font-size:11px;color:var(--mu);padding:0 16px calc(10px + env(safe-area-inset-bottom))}#by a{color:var(--tx);text-decoration:none;font-weight:600}
 .btn{font:700 20px 'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase;height:54px;border-radius:10px;border:0;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;color:#0C0D10;background:var(--tx);box-shadow:0 4px 0 #8f8d87;transition:transform .08s,box-shadow .08s}
@@ -72,7 +72,7 @@ h1{font-size:42px;line-height:1}
 </style>
 </head>
 <body>
-<div id="shell"><div id="top"></div><div id="prog"></div><div id="main"></div><div id="act"></div><div id="by">Desenvolvido por <a href="https://www.instagram.com/cruzavam" target="_blank" rel="noopener">@cruzavam</a></div></div>
+<div id="shell"><div id="top"></div><div id="prog"></div><div id="main"></div><div id="act"></div><div id="by">Desenvolvido por <a href="https://www.instagram.com/cruzavam" target="_blank" rel="noopener">@cruzavam</a> · v5</div></div>
 <div id="toast"></div>
 <script>
 const D={
@@ -163,7 +163,9 @@ on("a",start);on("b",()=>{s.ph="setup";render()});
 }}
 }
 render();
-if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("service-worker.js").catch(()=>{}));
+if("serviceWorker" in navigator){const had=!!navigator.serviceWorker.controller;let rl=0;
+navigator.serviceWorker.addEventListener("controllerchange",()=>{if(had&&!rl){rl=1;location.reload()}});
+addEventListener("load",()=>navigator.serviceWorker.register("service-worker.js").then(r=>r.update()).catch(()=>{}))}
 </script>
 </body>
 </html>
