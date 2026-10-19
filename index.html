@@ -1,666 +1,168 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
-
-<!-- PWA / "Add to Home Screen" -->
-<link rel="manifest" href="manifest.json" />
-<link rel="icon" href="icon-192.png" type="image/png" />
-<link rel="apple-touch-icon" href="icon-180.png" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Impostor" />
-<meta name="theme-color" content="#0b1520" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Impostor">
+<meta name="theme-color" content="#0C0D10">
 <title>Impostor Médico</title>
-
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
-
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { height: 100%; overscroll-behavior: none; }
-
-  body {
-    margin: 0;
-    background: #070d14;
-    color: #e8eef2;
-    font-family: 'IBM Plex Mono', monospace;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  .font-display { font-family: 'Spectral', serif; }
-
-  #shell {
-    height: 100dvh;
-    width: 100%;
-    max-width: 480px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    background: radial-gradient(circle at 50% 0%, #16283a 0%, #0b1520 55%, #070d14 100%);
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* app bar */
-  #topbar {
-    flex: 0 0 auto;
-    padding: calc(14px + env(safe-area-inset-top)) 20px 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid rgba(95,179,163,0.12);
-    background: rgba(11,21,32,0.6);
-    backdrop-filter: blur(6px);
-  }
-  #topbar .logo {
-    width: 30px; height: 30px; border-radius: 8px;
-    background: linear-gradient(160deg,#1c3245,#0c1620);
-    border: 1px solid #2c4257;
-    object-fit: cover;
-    display: block;
-  }
-  #topbar .brand { display: flex; flex-direction: column; line-height: 1.15; }
-  #topbar .brand b { font-family: 'Spectral', serif; font-size: 15px; color: #fff; font-weight: 600; }
-  #topbar .brand span { font-size: 10px; color: #5fb3a3; letter-spacing: 0.1em; text-transform: uppercase; }
-  #topbar .right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
-  #topbar .dots { display: flex; gap: 4px; }
-  #topbar .dot { width: 6px; height: 6px; border-radius: 50%; background: #24384a; transition: background .2s, transform .2s; }
-  #topbar .dot.done { background: #5fb3a3; }
-  #topbar .dot.current { background: #f2b880; transform: scale(1.3); }
-  .icon-btn {
-    width: 32px; height: 32px; border-radius: 50%; border: 1px solid #2c4257; background: #1a2a38;
-    color: #5fb3a3; display: flex; align-items: center; justify-content: center; cursor: pointer;
-    transition: transform .12s, background .15s; flex: 0 0 auto;
-  }
-  .icon-btn:active { transform: scale(0.9); background: #24384a; }
-
-  /* content */
-  #content {
-    flex: 1 1 auto;
-    overflow-y: auto;
-    padding: 22px 20px 12px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  #content.top-align { justify-content: flex-start; }
-
-  .pulse-svg { color: #5fb3a3; width: 100%; height: 26px; margin-bottom: 18px; opacity: 0.9; }
-  .pulse-anim { stroke-dasharray: 300; stroke-dashoffset: 300; animation: pulseMove 2.4s linear infinite; }
-  @keyframes pulseMove { to { stroke-dashoffset: 0; } }
-
-  .screen { animation: fadeSlide .32s cubic-bezier(.2,.7,.2,1); }
-  @keyframes fadeSlide { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-  .center { text-align: center; }
-
-  .eyebrow {
-    display: flex; align-items: center; gap: 8px;
-    color: #5fb3a3; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-  .center .eyebrow { justify-content: center; }
-
-  h1.title { font-size: 32px; margin: 0 0 6px; color: #fff; letter-spacing: -0.01em; line-height: 1.1; }
-  h2.title { font-size: 23px; margin: 0 0 10px; color: #fff; line-height: 1.25; }
-  p.sub { font-size: 13.5px; color: #8fa6b8; margin: 0 0 22px; line-height: 1.55; }
-
-  .row-between { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
-  .row-label { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: #c8d4dd; }
-
-  .counter { display: flex; align-items: center; gap: 14px; }
-  .counter button {
-    width: 34px; height: 34px; border-radius: 50%; border: none; background: #1a2a38;
-    color: #fff; font-size: 18px; cursor: pointer; transition: transform .1s, background .15s;
-  }
-  .counter button:active { transform: scale(0.9); background: #24384a; }
-  .counter span { width: 26px; text-align: center; font-family: 'Spectral', serif; font-size: 19px; color: #fff; }
-
-  .level-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 22px; }
-  .level-btn {
-    font-size: 11.5px; padding: 9px 4px; border-radius: 7px; border: 1px solid #1e3140; cursor: pointer;
-    background: #131f2c; color: #8fa6b8; font-family: 'IBM Plex Mono', monospace; transition: all .15s;
-  }
-  .level-btn.active { background: #5fb3a3; color: #0b1520; font-weight: 600; border-color: #5fb3a3; }
-  .level-btn:active { transform: scale(0.96); }
-
-  details { margin-bottom: 4px; }
-  summary { font-size: 13px; color: #5fb3a3; cursor: pointer; list-style: none; }
-  summary::-webkit-details-marker { display: none; }
-  summary:before { content: "▸ "; }
-  details[open] summary:before { content: "▾ "; }
-  .names-list { margin-top: 12px; max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; }
-  .names-list input {
-    width: 100%; font-size: 13.5px; padding: 9px 12px; border-radius: 7px;
-    background: #0e1822; color: #e8eef2; border: 1px solid #1e3140; font-family: inherit;
-  }
-  .names-list input:focus { border-color: #5fb3a3; outline: none; }
-
-  .paper {
-    background: #fdf6ee; border-radius: 10px; padding: 26px 22px; margin-bottom: 4px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-  }
-  .paper.doctor { border: 2px solid #5fb3a3; }
-  .paper.impostor { border: 2px dashed #c1432e; }
-  .paper .clip { font-size: 16px; margin-bottom: 6px; }
-  .paper .eyebrow2 { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #7a8f85; margin-bottom: 8px; }
-  .paper .diag { font-family: 'Spectral', serif; font-size: 25px; color: #1f2d27; }
-  .paper .note { font-size: 13.5px; color: #5a6f65; margin-top: 16px; line-height: 1.55; }
-
-  .stamp {
-    display: inline-block; padding: 10px 18px; border: 3px solid #c1432e; border-radius: 6px;
-    color: #c1432e; font-family: 'Spectral', serif; font-size: 22px; letter-spacing: 0.06em;
-    transform: rotate(-6deg); animation: stampIn 0.4s cubic-bezier(.2,.8,.3,1.2) forwards;
-  }
-  @keyframes stampIn {
-    0% { transform: scale(2.4) rotate(-16deg); opacity: 0; }
-    60% { transform: scale(0.94) rotate(-6deg); opacity: 1; }
-    100% { transform: scale(1) rotate(-6deg); opacity: 1; }
-  }
-
-  .announce-box {
-    background: #fdf6ee; border: 2px solid #5fb3a3; border-radius: 10px;
-    padding: 26px; margin-bottom: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-    animation: stampIn 0.4s cubic-bezier(.2,.8,.3,1.2) forwards;
-  }
-  .announce-box .eyebrow2 { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #7a8f85; margin-bottom: 8px; }
-  .announce-box .name { font-family: 'Spectral', serif; font-size: 28px; color: #1f2d27; }
-
-  .starter-box {
-    background: #1a2a38; border: 1px solid #2c4257; border-radius: 10px;
-    padding: 14px 16px; margin-bottom: 20px; text-align: center;
-  }
-  .starter-box .eyebrow2 { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #7a8f95; margin-bottom: 4px; }
-  .starter-box .name { font-family: 'Spectral', serif; font-size: 19px; color: #f2b880; }
-  .starter-box .hint { font-size: 11.5px; color: #5a7285; margin-top: 4px; }
-
-  .timer { font-family: 'Spectral', serif; font-size: 58px; text-align: center; margin-bottom: 4px; font-variant-numeric: tabular-nums; }
-
-  /* action bar */
-  #actionbar {
-    flex: 0 0 auto;
-    padding: 12px 20px calc(16px + env(safe-area-inset-bottom));
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    background: linear-gradient(to top, rgba(7,13,20,0.9), rgba(7,13,20,0));
-  }
-  .btn-row { display: flex; gap: 8px; }
-  .btn-row .btn { flex: 1; }
-
-  button.btn {
-    width: 100%; padding: 15px; border-radius: 12px; border: none; cursor: pointer;
-    font-family: 'Spectral', serif; font-size: 17px; display: flex; align-items: center;
-    justify-content: center; gap: 8px; transition: transform .12s, filter .15s;
-  }
-  button.btn:active { transform: scale(0.97); filter: brightness(0.95); }
-  .btn-primary { background: #c1432e; color: #fdf6ee; }
-  .btn-accent { background: #5fb3a3; color: #0b1520; }
-  .btn-muted { background: #1c2c3a; color: #e8eef2; border: 1px solid #2c4257; }
-  .btn-square {
-    padding: 0 18px; border-radius: 12px; border: 1px solid #2c4257; background: #1c2c3a;
-    color: #e8eef2; cursor: pointer; font-size: 16px; transition: transform .12s;
-  }
-  .btn-square:active { transform: scale(0.92); }
-
-  .footer-hint { text-align: center; font-size: 10.5px; color: #3f5568; margin-top: 2px; }
-
-  #madeby {
-    flex: 0 0 auto;
-    text-align: center;
-    padding: 2px 20px calc(10px + env(safe-area-inset-bottom));
-    font-size: 11px;
-    color: #4a6275;
-    background: #070d14;
-  }
-  #madeby a { color: #5fb3a3; text-decoration: none; font-weight: 600; }
-  #madeby a:active { opacity: 0.7; }
-
-  #toast {
-    position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(10px);
-    background: #1a2a38; color: #e8eef2; padding: 10px 18px; border-radius: 20px;
-    font-size: 12.5px; border: 1px solid #2c4257; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; z-index: 50;
-  }
-  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-  input:focus, button:focus-visible { outline: 2px solid #5fb3a3; outline-offset: 2px; }
-
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-thumb { background: #24384a; border-radius: 4px; }
+:root{--bg:#0C0D10;--s1:#15171C;--s2:#1D2027;--ln:#272B34;--tx:#ECEAE4;--mu:#8B909C;--rd:#E5484D;--gn:#3DB07F;--gd:#E0B050}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--tx);font-family:'Barlow',system-ui,sans-serif;overscroll-behavior:none}
+button{font-family:inherit;cursor:pointer}
+#shell{height:100dvh;max-width:480px;margin:0 auto;display:flex;flex-direction:column;border-inline:1px solid var(--ln)}
+#top{display:flex;align-items:center;gap:10px;padding:calc(12px + env(safe-area-inset-top)) 16px 12px}
+#top img{width:32px;height:32px;border-radius:8px}
+#top b{font:700 20px 'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.sp{margin-left:auto;display:flex;gap:8px;align-items:center}
+.chip{font:600 13px 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--gd);border:1px solid var(--ln);padding:5px 9px;border-radius:6px;display:inline-flex;align-items:center;gap:6px}
+.ib{width:34px;height:34px;border-radius:8px;border:1px solid var(--ln);background:var(--s1);color:var(--tx);display:flex;align-items:center;justify-content:center}
+#prog{height:3px;background:var(--ln)}#prog i{display:block;height:3px;background:var(--gd);transition:width .3s}
+#main{flex:1;overflow-y:auto;padding:20px 16px}
+#act{padding:12px 16px 8px;display:flex;flex-direction:column;gap:10px}
+#by{text-align:center;font-size:11px;color:var(--mu);padding:0 16px calc(10px + env(safe-area-inset-bottom))}#by a{color:var(--tx);text-decoration:none;font-weight:600}
+.btn{font:700 20px 'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase;height:54px;border-radius:10px;border:0;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;color:#0C0D10;background:var(--tx);box-shadow:0 4px 0 #8f8d87;transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #8f8d87}
+.btn.rd{background:var(--rd);color:#fff;box-shadow:0 4px 0 #8f2b2e}.btn.rd:active{box-shadow:0 1px 0 #8f2b2e}
+.btn.gn{background:var(--gn);color:#06130d;box-shadow:0 4px 0 #226b4b}.btn.gn:active{box-shadow:0 1px 0 #226b4b}
+.btn.gh{background:var(--s2);color:var(--tx);border:1px solid var(--ln);box-shadow:0 4px 0 #07080a}.btn.gh:active{box-shadow:0 1px 0 #07080a}
+.row{display:flex;gap:10px}.row .btn{flex:1}
+.pn{background:var(--s1);border:1px solid var(--ln);border-radius:12px;overflow:hidden}
+.st{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--ln)}.st:last-child{border:0}
+.st label,.st .nmx{flex:1;font-weight:600;font-size:15px}
+.num{display:flex;align-items:center;gap:6px}.num button{width:32px;height:32px;border-radius:8px;border:1px solid var(--ln);background:var(--s2);color:var(--tx);font-size:18px}
+.num span{width:28px;text-align:center;font:700 24px 'Barlow Condensed',sans-serif}
+.seg{display:flex;background:var(--s2);border-radius:8px;padding:3px;gap:3px;margin:0 14px 14px}
+.seg button{flex:1;border:0;background:none;color:var(--mu);font:600 15px 'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:8px 0;border-radius:6px}
+.seg .on{background:var(--tx);color:#0C0D10}
+.lb{font:600 13px 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin:22px 2px 8px}
+.ro{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ro div{display:flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--ln);border-radius:10px;padding:6px 10px}
+.ro input{min-width:0;flex:1;background:none;border:0;color:var(--tx);font:500 14px 'Barlow',sans-serif;outline:0}
+.ct{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px}
+.ct .lb{margin:0}
+.cd,h1{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-weight:700;margin:0}
+h1{font-size:42px;line-height:1}
+.mu{color:var(--mu);font-size:15px;line-height:1.5;margin:0;max-width:320px}
+.card{width:100%;text-align:left;background:var(--tx);color:#0C0D10;border-radius:14px;padding:22px;animation:fl .35s ease-out}
+.card.imp{background:#2A1417;border:1px solid var(--rd);color:var(--tx)}
+.card p{margin:8px 0 0;font-size:14px;opacity:.7;line-height:1.45}
+.tg{display:inline-block;font:700 13px 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:4px 9px;border-radius:5px;background:var(--gn);color:#06130d}.tg.r{background:var(--rd);color:#fff}
+.big{font:700 42px/1 'Barlow Condensed',sans-serif;text-transform:uppercase;margin:12px 0 2px;word-break:break-word}
+.sq{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:320px}
+.rg{position:relative;width:240px;height:240px}
+.tm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 64px 'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
+.rk{width:22px;font:700 20px 'Barlow Condensed',sans-serif;color:var(--mu)}
+.pt{font:700 26px 'Barlow Condensed',sans-serif;color:var(--gd)}
+.dl{font:700 14px 'Barlow Condensed',sans-serif;color:var(--gn);margin-right:6px}
+.in{animation:up .3s ease-out}
+@keyframes fl{from{transform:rotateY(90deg);opacity:0}to{transform:none;opacity:1}}
+@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:var(--s2);border:1px solid var(--ln);padding:10px 16px;border-radius:8px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.on{opacity:1}
 </style>
 </head>
 <body>
-  <div id="shell">
-    <div id="topbar"></div>
-    <div id="content"></div>
-    <div id="actionbar"></div>
-    <div id="madeby">Desenvolvido por <a href="https://www.instagram.com/cruzavam" target="_blank" rel="noopener">@cruzavam</a></div>
-  </div>
-  <div id="toast"></div>
-
+<div id="shell"><div id="top"></div><div id="prog"></div><div id="main"></div><div id="act"></div><div id="by">Desenvolvido por <a href="https://www.instagram.com/cruzavam" target="_blank" rel="noopener">@cruzavam</a></div></div>
+<div id="toast"></div>
 <script>
-const DISEASES = [
-  { name: "Diabetes", level: "facil" },
-  { name: "Hipertensión", level: "facil" },
-  { name: "Asma", level: "facil" },
-  { name: "Migraña", level: "facil" },
-  { name: "Anemia", level: "facil" },
-  { name: "Varicela", level: "facil" },
-  { name: "Gripe", level: "facil" },
-  { name: "Neumonía", level: "facil" },
-  { name: "Apendicitis", level: "facil" },
-  { name: "Conjuntivitis", level: "facil" },
-  { name: "Amigdalitis", level: "facil" },
-  { name: "Otitis", level: "facil" },
-  { name: "Gastritis", level: "facil" },
-  { name: "Bronquitis", level: "facil" },
-  { name: "Sarampión", level: "facil" },
-  { name: "Dermatitis", level: "facil" },
-  { name: "Insomnio", level: "facil" },
-  { name: "Obesidad", level: "facil" },
-  { name: "Alergia alimentaria", level: "facil" },
-  { name: "Resfriado común", level: "facil" },
-  { name: "Artritis reumatoide", level: "intermedio" },
-  { name: "Hipotiroidismo", level: "intermedio" },
-  { name: "Hipertiroidismo", level: "intermedio" },
-  { name: "Osteoporosis", level: "intermedio" },
-  { name: "Colitis ulcerosa", level: "intermedio" },
-  { name: "Epilepsia", level: "intermedio" },
-  { name: "Cálculos renales", level: "intermedio" },
-  { name: "Úlcera péptica", level: "intermedio" },
-  { name: "Cirrosis hepática", level: "intermedio" },
-  { name: "Fibromialgia", level: "intermedio" },
-  { name: "Psoriasis", level: "intermedio" },
-  { name: "Vértigo posicional", level: "intermedio" },
-  { name: "Reflujo gastroesofágico", level: "intermedio" },
-  { name: "Tendinitis", level: "intermedio" },
-  { name: "Escoliosis", level: "intermedio" },
-  { name: "Sinusitis crónica", level: "intermedio" },
-  { name: "Varices", level: "intermedio" },
-  { name: "Cataratas", level: "intermedio" },
-  { name: "Glaucoma", level: "intermedio" },
-  { name: "Anorexia nerviosa", level: "intermedio" },
-  { name: "Lupus eritematoso", level: "dificil" },
-  { name: "Esclerosis múltiple", level: "dificil" },
-  { name: "Enfermedad de Crohn", level: "dificil" },
-  { name: "Fibrosis quística", level: "dificil" },
-  { name: "Síndrome de Guillain-Barré", level: "dificil" },
-  { name: "Enfermedad de Parkinson", level: "dificil" },
-  { name: "Enfermedad de Alzheimer", level: "dificil" },
-  { name: "Miastenia gravis", level: "dificil" },
-  { name: "Hemofilia", level: "dificil" },
-  { name: "Anemia falciforme", level: "dificil" },
-  { name: "Enfermedad de Wilson", level: "dificil" },
-  { name: "Síndrome de Cushing", level: "dificil" },
-  { name: "Enfermedad de Addison", level: "dificil" },
-  { name: "Espondilitis anquilosante", level: "dificil" },
-  { name: "Síndrome de Sjögren", level: "dificil" },
-  { name: "Enfermedad de Graves", level: "dificil" },
-  { name: "Amiloidosis", level: "dificil" },
-  { name: "Porfiria", level: "dificil" },
-];
-const LEVEL_LABEL = { facil: "Fácil", intermedio: "Intermedio", dificil: "Difícil", todas: "Todas" };
-
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
+const D={
+facil:"Diabetes,Hipertensión,Asma,Migraña,Anemia,Varicela,Gripe,Neumonía,Apendicitis,Conjuntivitis,Amigdalitis,Otitis,Gastritis,Bronquitis,Sarampión,Dermatitis,Insomnio,Obesidad,Alergia alimentaria,Resfriado común,Covid-19,Dengue,Malaria,Tuberculosis,Hepatitis,Cáncer,Infarto,Depresión,Ansiedad,Rubéola,Paperas,Tos ferina,Cólera,Tétanos,Rabia,VIH/Sida,Herpes,Acné,Alopecia,Hemorroides,Estreñimiento,Diarrea,Intoxicación alimentaria,Cistitis,Hernia,Fractura,Esguince,Caries,Miopía,Lumbalgia,Ciática,Colesterol alto,Gota,Hipoglucemia,Deshidratación,Insolación,Mononucleosis,Zika,Polio,Derrame cerebral".split(","),
+intermedio:"Artritis reumatoide,Hipotiroidismo,Hipertiroidismo,Osteoporosis,Colitis ulcerosa,Epilepsia,Cálculos renales,Úlcera péptica,Cirrosis hepática,Fibromialgia,Psoriasis,Vértigo posicional,Reflujo gastroesofágico,Tendinitis,Escoliosis,Sinusitis crónica,Varices,Cataratas,Glaucoma,Anorexia nerviosa".split(","),
+dificil:"Lupus eritematoso,Esclerosis múltiple,Enfermedad de Crohn,Fibrosis quística,Síndrome de Guillain-Barré,Enfermedad de Parkinson,Enfermedad de Alzheimer,Miastenia gravis,Hemofilia,Anemia falciforme,Enfermedad de Wilson,Síndrome de Cushing,Enfermedad de Addison,Espondilitis anquilosante,Síndrome de Sjögren,Enfermedad de Graves,Amiloidosis,Porfiria".split(",")};
+const LV={todas:"Todas",facil:"Fácil",intermedio:"Medio",dificil:"Difícil"};
+const COL=["#D9534F","#4F7DF3","#3FAE6A","#E58AC1","#F09A3E","#E6D04F","#8C95A3","#E9EDF4","#8B5CF6","#9A6A3F","#35C9C0","#9BD94A","#B04A6E","#F0B7C6"];
+const IC={users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',bars:'<path d="M12 20V10M18 20V4M6 20v-4"/>',share:'<path d="M12 16V4M7 9l5-5 5 5M5 21h14a2 2 0 0 0 2-2v-4M5 21a2 2 0 0 1-2-2v-4"/>',play:'<path d="M6 4l14 8-14 8z" fill="currentColor"/>',pause:'<path d="M7 4v16M17 4v16"/>',reset:'<path d="M1 4v6h6M3.5 15a9 9 0 1 0 2.1-9.4L1 10"/>',eye:'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',eyeoff:'<path d="M17.9 17.9A10.9 10.9 0 0 1 12 20C5 20 1 12 1 12a18 18 0 0 1 5.1-5.9M9.9 4.2A10.7 10.7 0 0 1 12 4c7 0 11 8 11 8a18 18 0 0 1-2.2 3.2M1 1l22 22"/>',arrow:'<path d="M5 12h14M12 5l7 7-7 7"/>'};
+const ic=(n,z=18)=>`<svg width="${z}" height="${z}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${IC[n]}</svg>`;
+const sh=(x,y,w,h,r,c)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${c}"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="#000" opacity=".28"/>`;
+const bean=(c,z=40)=>`<svg width="${z}" height="${z*1.1}" viewBox="0 0 40 44" style="flex:none">${sh(26,16,10,14,4,c)}${sh(9,34,8,9,3,c)}${sh(21,34,8,9,3,c)}<rect x="5" y="2" width="27" height="36" rx="13.5" fill="${c}"/><rect x="16" y="10" width="16" height="9" rx="4.5" fill="#BFE3EF"/><rect x="18" y="12" width="5" height="2.5" rx="1.2" fill="#fff" opacity=".8"/></svg>`;
+const $=id=>document.getElementById(id);
+const on=(id,f)=>{const e=$(id);if(e)e.onclick=f};
+const KEY="impmed2";
+let s={ph:"setup",n:10,k:1,lv:"todas",t:90,names:[],sc:[],round:0,i:0,rv:false,dis:"",imp:[],st:0,sr:false,sec:90,run:false,rs:false,win:null,dl:[]};
+try{const p=JSON.parse(localStorage.getItem(KEY)||"{}");["n","k","lv","t","names","sc","round"].forEach(x=>{if(p[x]!==undefined)s[x]=p[x]})}catch(e){}
+const maxK=()=>Math.max(1,Math.min(3,s.n-2));
+function fit(){s.names=Array.from({length:s.n},(_,i)=>s.names[i]||"Jugador "+(i+1));s.sc=Array.from({length:s.n},(_,i)=>s.sc[i]||0);s.k=Math.min(s.k,maxK())}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({n:s.n,k:s.k,lv:s.lv,t:s.t,names:s.names,sc:s.sc,round:s.round}))}catch(e){}}
+fit();
+const nm=i=>(s.names[i]||"").trim()||"Jugador "+(i+1);
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const fmt=x=>String(Math.floor(x/60)).padStart(2,"0")+":"+String(x%60).padStart(2,"0");
+let iv,tt;
+function toast(m){const e=$("toast");e.textContent=m;e.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>e.classList.remove("on"),2000)}
+function share(){const d={title:"Impostor Médico",text:"Juega Impostor Médico con nosotros. ¡Descubre quién es el impostor!",url:location.href};
+if(navigator.share)navigator.share(d).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(d.url).then(()=>toast("Enlace copiado"));else prompt("Copia el enlace:",d.url)}
+function start(){const pool=s.lv==="todas"?[].concat(D.facil,D.intermedio,D.dificil):D[s.lv];
+s.dis=shuffle(pool)[0];s.imp=shuffle([...Array(s.n).keys()]).slice(0,s.k);s.st=Math.floor(Math.random()*s.n);
+Object.assign(s,{ph:"reveal",i:0,rv:false,sr:false,sec:s.t,run:false,rs:false,win:null,dl:[]});s.round++;clearInterval(iv);save();render()}
+function next(){if(s.i+1<s.n){s.i++;s.rv=false}else s.ph="ready";render()}
+function ringCol(){return s.sec<=10?"#E5484D":s.sec/s.t<.34?"#E0B050":"#ECEAE4"}
+function upd(){const t=$("tm");if(!t)return;t.textContent=fmt(s.sec);t.style.color=ringCol();const r=$("rg");r.setAttribute("stroke",ringCol());r.setAttribute("stroke-dashoffset",553*(1-s.sec/s.t))}
+function tick(){s.sec--;if(s.sec<=0){s.sec=0;clearInterval(iv);s.run=false;try{navigator.vibrate&&navigator.vibrate([300,100,300])}catch(e){}render()}else upd()}
+function tog(){if(s.sec<=0)return;s.run=!s.run;clearInterval(iv);if(s.run)iv=setInterval(tick,1000);$("tg").innerHTML=s.run?ic("pause")+" Pausar":ic("play")+" Iniciar"}
+function pick(w){s.win=w;s.dl=s.sc.map((_,i)=>w==="crew"?(s.imp.includes(i)?0:1):(s.imp.includes(i)?2:0));s.sc=s.sc.map((v,i)=>v+s.dl[i]);save();render()}
+function render(){
+const M=$("main"),A=$("act");
+$("top").innerHTML=`<img src="icon-192.png" alt=""><b>Impostor Médico</b><div class="sp">${s.ph!=="setup"?`<span class="chip">Ronda ${s.round}</span>`:""}<button class="ib" id="sh">${ic("share",16)}</button></div>`;
+on("sh",share);
+const pct=s.ph==="setup"?0:s.ph==="reveal"?(s.i+(s.rv?1:0))/s.n*100:100;
+$("prog").innerHTML=`<i style="width:${pct}%"></i>`;
+M.scrollTop=0;
+if(s.ph==="setup"){
+const any=s.sc.some(v=>v>0);
+M.innerHTML=`<div class="in"><div class="lb" style="margin-top:0">Partida</div><div class="pn">
+<div class="st">${ic("users")}<label>Jugadores</label><div class="num"><button id="nd">−</button><span>${s.n}</span><button id="ni">+</button></div></div>
+<div class="st">${bean("#E5484D",18)}<label>Impostores</label><div class="num"><button id="kd">−</button><span>${s.k}</span><button id="ki">+</button></div></div>
+<div class="st" style="border:0;padding-bottom:8px">${ic("bars")}<label>Dificultad</label></div><div class="seg">${Object.keys(LV).map(k=>`<button data-lv="${k}" class="${s.lv===k?"on":""}">${LV[k]}</button>`).join("")}</div>
+<div class="st" style="border:0;padding-bottom:8px">${ic("clock")}<label>Tiempo de debate</label></div><div class="seg">${[60,90,120,180].map(x=>`<button data-t="${x}" class="${s.t===x?"on":""}">${fmt(x).replace(/^0/,"")}</button>`).join("")}</div>
+</div><div class="lb">Jugadores</div><div class="ro">${s.names.map((n,i)=>`<div>${bean(COL[i],24)}<input data-i="${i}" value="${n.replace(/"/g,"&quot;")}" maxlength="16"></div>`).join("")}</div>
+${any?`<div class="lb">Marcador</div><button class="btn gh" id="rp">Reiniciar puntos</button>`:""}</div>`;
+A.innerHTML=`<button class="btn" id="go">${ic("play")} Jugar</button>`;
+on("nd",()=>{s.n=Math.max(4,s.n-1);fit();render()});on("ni",()=>{s.n=Math.min(14,s.n+1);fit();render()});
+on("kd",()=>{s.k=Math.max(1,s.k-1);render()});on("ki",()=>{s.k=Math.min(maxK(),s.k+1);render()});
+M.querySelectorAll("[data-lv]").forEach(b=>b.onclick=()=>{s.lv=b.dataset.lv;save();render()});
+M.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{s.t=+b.dataset.t;save();render()});
+M.querySelectorAll("input").forEach(e=>e.oninput=()=>{s.names[+e.dataset.i]=e.value;save()});
+on("rp",()=>{s.sc=s.sc.map(()=>0);s.round=0;save();render()});on("go",start);
+}else if(s.ph==="reveal"){
+const imp=s.imp.includes(s.i);
+M.innerHTML=`<div class="ct in"><div class="lb">Jugador ${s.i+1} de ${s.n}</div>${bean(COL[s.i],96)}<h1>${nm(s.i)}</h1>${!s.rv?`<p class="mu">Pásale el teléfono a ${nm(s.i)}. Nadie más debe mirar la pantalla.</p>`:imp?`<div class="card imp"><span class="tg r">Impostor</span><div class="big">Sin diagnóstico</div><p>No conoces la enfermedad. Escucha, improvisa y no te delates.</p></div>`:`<div class="card"><span class="tg">Médico</span><div class="big">${s.dis}</div><p>Da pistas sin decir el nombre. Ayuda a descubrir al impostor.</p></div>`}</div>`;
+A.innerHTML=!s.rv?`<button class="btn" id="a">${ic("eye")} Ver mi rol</button>`:`<button class="btn gh" id="a">${ic("eyeoff")} ${s.i+1<s.n?"Ocultar y pasar":"Ocultar y continuar"}</button>`;
+on("a",()=>{if(!s.rv){s.rv=true;render()}else next()});
+}else if(s.ph==="ready"){
+M.innerHTML=`<div class="ct in"><div class="lb">Roles repartidos</div><div class="sq">${s.names.map((_,i)=>bean(COL[i],30)).join("")}</div>${!s.sr?`<h1>Todos listos</h1><p class="mu">Cuando todos estén atentos, toquen Comenzar para saber quién abre la ronda.</p>`:`<div class="lb" style="margin-top:10px">Abre la ronda</div>${bean(COL[s.st],104)}<h1>${nm(s.st)}</h1><p class="mu">Después se sigue en orden, hacia la derecha.</p>`}</div>`;
+A.innerHTML=!s.sr?`<button class="btn" id="a">${ic("play")} Comenzar</button>`:`<button class="btn" id="a">Ir al debate ${ic("arrow")}</button>`;
+on("a",()=>{if(!s.sr)s.sr=true;else s.ph="discussion";render()});
+}else if(s.ph==="discussion"){
+const f=s.sec/s.t;
+M.innerHTML=`<div class="ct in"><div class="lb">Debate</div><div class="rg"><svg viewBox="0 0 200 200" width="240" height="240"><circle cx="100" cy="100" r="88" fill="none" stroke="#272B34" stroke-width="10"/><circle id="rg" cx="100" cy="100" r="88" fill="none" stroke="${ringCol()}" stroke-width="10" stroke-linecap="round" stroke-dasharray="553" stroke-dashoffset="${553*(1-f)}" transform="rotate(-90 100 100)"/></svg><div class="tm" id="tm" style="color:${ringCol()}">${fmt(s.sec)}</div></div><span class="chip" style="color:var(--tx)">Abre ${bean(COL[s.st],18)} ${nm(s.st)}</span><p class="mu">${s.sec===0?"¡Tiempo! Voten ahora, a la cuenta de tres.":"Una pista por turno. Nadie dice el nombre de la enfermedad."}</p></div>`;
+A.innerHTML=`<div class="row"><button class="btn" id="tg">${s.run?ic("pause")+" Pausar":ic("play")+" Iniciar"}</button><button class="btn gh" id="rt" style="flex:0 0 58px">${ic("reset")}</button></div><button class="btn rd" id="vt">Votar</button>`;
+on("tg",tog);on("rt",()=>{clearInterval(iv);s.sec=s.t;s.run=false;render()});on("vt",()=>{clearInterval(iv);s.run=false;s.ph="result";render()});
+}else if(s.ph==="result"){
+if(!s.rs){
+M.innerHTML=`<div class="ct in"><div class="lb">Votación</div><h1>¿Quién es el impostor?</h1><p class="mu">A la cuenta de tres, todos señalan a quien creen impostor. Después, revelen.</p></div>`;
+A.innerHTML=`<button class="btn rd" id="a">Revelar</button>`;on("a",()=>{s.rs=true;render()});
+}else if(s.win===null){
+M.innerHTML=`<div class="in"><div class="lb" style="margin-top:0">${s.k>1?"Los impostores eran":"El impostor era"}</div><div class="pn">${s.imp.map(i=>`<div class="st">${bean(COL[i],30)}<span class="nmx">${nm(i)}</span><span class="tg r">Impostor</span></div>`).join("")}</div><div class="lb">La enfermedad era</div><div class="card"><span class="tg">Diagnóstico</span><div class="big">${s.dis}</div></div><div class="lb">¿Quién ganó?</div></div>`;
+A.innerHTML=`<button class="btn gn" id="c">Ganaron los médicos · +1</button><button class="btn rd" id="m">${s.k>1?"Ganaron los impostores":"Ganó el impostor"} · +2</button>`;
+on("c",()=>pick("crew"));on("m",()=>pick("imp"));
+}else{
+const ord=s.sc.map((v,i)=>i).sort((a,b)=>s.sc[b]-s.sc[a]);
+M.innerHTML=`<div class="in"><div class="lb" style="margin-top:0">${s.win==="crew"?"Ganaron los médicos":s.k>1?"Ganaron los impostores":"Ganó el impostor"}</div><div class="pn">${ord.map((i,r)=>`<div class="st"><span class="rk" style="${r===0?"color:var(--gd)":""}">${r+1}</span>${bean(COL[i],28)}<span class="nmx">${nm(i)}</span>${s.dl[i]?`<span class="dl">+${s.dl[i]}</span>`:""}<span class="pt">${s.sc[i]}</span></div>`).join("")}</div></div>`;
+A.innerHTML=`<button class="btn" id="a">Siguiente ronda ${ic("arrow")}</button><button class="btn gh" id="b">Menú</button>`;
+on("a",start);on("b",()=>{s.ph="setup";render()});
+}}
 }
-
-let state = {
-  phase: "setup",
-  playerCount: 10,
-  impostorCount: 1,
-  discussionSeconds: 90,
-  names: Array.from({ length: 10 }, (_, i) => (i === 9 ? "Jugador 10 (extra)" : `Jugador ${i + 1}`)),
-  level: "todas",
-  currentIndex: 0,
-  revealed: false,
-  disease: null,
-  impostorIndices: [],
-  starterIndex: null,
-  announceRevealed: false,
-  seconds: 90,
-  running: false,
-  resultShown: false,
-};
-let timerInterval = null;
-
-function set(partial) {
-  Object.assign(state, partial);
-  render();
-}
-
-function ensureNamesLength() {
-  const next = [...state.names];
-  while (next.length < state.playerCount) next.push(`Jugador ${next.length + 1}`);
-  state.names = next.slice(0, state.playerCount);
-}
-
-function startGame() {
-  const pool = state.level === "todas" ? DISEASES : DISEASES.filter(d => d.level === state.level);
-  const chosen = shuffle(pool)[0];
-  const order = shuffle(Array.from({ length: state.playerCount }, (_, i) => i));
-  const impostors = order.slice(0, state.impostorCount);
-  const starter = Math.floor(Math.random() * state.playerCount);
-  clearInterval(timerInterval);
-  set({
-    disease: chosen.name,
-    impostorIndices: impostors,
-    starterIndex: starter,
-    announceRevealed: false,
-    currentIndex: 0,
-    revealed: false,
-    seconds: state.discussionSeconds,
-    running: false,
-    resultShown: false,
-    phase: "announce",
-  });
-}
-
-function nextPlayer() {
-  if (state.currentIndex + 1 < state.playerCount) {
-    set({ currentIndex: state.currentIndex + 1, revealed: false });
-  } else {
-    set({ phase: "discussion" });
-  }
-}
-
-function toggleTimer() {
-  if (!state.running) {
-    state.running = true;
-    timerInterval = setInterval(() => {
-      if (state.seconds <= 0) { clearInterval(timerInterval); set({ running: false }); return; }
-      set({ seconds: state.seconds - 1 });
-    }, 1000);
-    render();
-  } else {
-    clearInterval(timerInterval);
-    set({ running: false });
-  }
-}
-
-function resetTimer() {
-  clearInterval(timerInterval);
-  set({ seconds: state.discussionSeconds, running: false });
-}
-
-function fullReset() {
-  clearInterval(timerInterval);
-  set({ phase: "setup", disease: null, impostorIndices: [], starterIndex: null, announceRevealed: false });
-}
-
-function fmtTime(s) {
-  const m = String(Math.floor(s / 60)).padStart(2, "0");
-  const ss = String(s % 60).padStart(2, "0");
-  return `${m}:${ss}`;
-}
-
-let toastTimer = null;
-function showToast(msg) {
-  const el = document.getElementById("toast");
-  el.textContent = msg;
-  el.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove("show"), 2200);
-}
-
-function shareGame() {
-  const shareData = {
-    title: "Impostor Médico",
-    text: "🩺 Te reto a jugar Impostor Médico con nosotros. ¡Descubre quién es el impostor!",
-    url: window.location.href,
-  };
-  if (navigator.share) {
-    navigator.share(shareData).catch(() => {});
-  } else if (navigator.clipboard) {
-    navigator.clipboard.writeText(shareData.url)
-      .then(() => showToast("Enlace copiado ✅"))
-      .catch(() => window.prompt("Copia el enlace:", shareData.url));
-  } else {
-    window.prompt("Copia el enlace:", shareData.url);
-  }
-}
-
-function pulseSvg() {
-  return `<svg class="pulse-svg" viewBox="0 0 300 40" preserveAspectRatio="none">
-    <polyline class="pulse-anim" points="0,20 60,20 75,20 85,4 95,36 105,20 120,20 140,20 150,10 160,30 170,20 190,20 300,20"
-      fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-  </svg>`;
-}
-
-function renderTopbar() {
-  const s = state;
-  const top = document.getElementById("topbar");
-  let dots = "";
-  if (s.phase === "reveal") {
-    dots = `<div class="dots">${Array.from({length: s.playerCount}).map((_,i) => {
-      let cls = "";
-      if (i < s.currentIndex) cls = "done";
-      else if (i === s.currentIndex) cls = "current";
-      return `<div class="dot ${cls}"></div>`;
-    }).join("")}</div>`;
-  }
-  top.innerHTML = `
-    <img class="logo" src="icon-192.png" alt="Impostor Médico" />
-    <div class="brand"><b>Impostor Médico</b><span>Historia clínica</span></div>
-    <div class="right">
-      ${dots}
-      <button class="icon-btn" id="shareBtn" aria-label="Compartir">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M5 21h14a2 2 0 0 0 2-2v-4"/><path d="M5 21a2 2 0 0 1-2-2v-4"/>
-        </svg>
-      </button>
-    </div>
-  `;
-  top.querySelector("#shareBtn").onclick = shareGame;
-}
-
-function render() {
-  renderTopbar();
-  const content = document.getElementById("content");
-  const actionbar = document.getElementById("actionbar");
-  content.className = "";
-  actionbar.innerHTML = "";
-  const s = state;
-
-  if (s.phase === "setup") {
-    content.className = "top-align";
-    content.innerHTML = `
-      <div class="screen">
-        ${pulseSvg()}
-        <div class="eyebrow">🩺 <span>Sala de espera</span></div>
-        <h1 class="title font-display">Impostor Médico</h1>
-        <p class="sub">${s.playerCount - s.impostorCount} jugador${s.playerCount - s.impostorCount === 1 ? '' : 'es'} reciben el diagnóstico. ${s.impostorCount} impostor${s.impostorCount === 1 ? ' no sabe' : 'es no saben'} nada. Pasen el mismo teléfono, uno por uno.</p>
-
-        <div class="row-between">
-          <span class="row-label">👥 Jugadores</span>
-          <div class="counter">
-            <button id="dec">−</button>
-            <span class="font-display">${s.playerCount}</span>
-            <button id="inc">+</button>
-          </div>
-        </div>
-
-        <div class="row-between">
-          <span class="row-label">🎭 Impostores</span>
-          <div class="counter">
-            <button id="impDec">−</button>
-            <span class="font-display">${s.impostorCount}</span>
-            <button id="impInc">+</button>
-          </div>
-        </div>
-
-        <div>
-          <span class="row-label" style="margin-bottom:8px; display:flex;">📋 Dificultad del diagnóstico</span>
-          <div class="level-grid">
-            ${["todas","facil","intermedio","dificil"].map(lv => `
-              <button class="level-btn ${s.level===lv?'active':''}" data-level="${lv}">${LEVEL_LABEL[lv]}</button>
-            `).join("")}
-          </div>
-        </div>
-
-        <div>
-          <span class="row-label" style="margin-bottom:8px; display:flex;">⏱ Tiempo de discusión</span>
-          <div class="level-grid">
-            ${[60,90,120,180].map(sec => `
-              <button class="level-btn ${s.discussionSeconds===sec?'active':''}" data-sec="${sec}">${sec < 120 ? sec+'s' : Math.floor(sec/60)+' min'}</button>
-            `).join("")}
-          </div>
-        </div>
-
-        <details>
-          <summary>Editar nombres de los jugadores (opcional)</summary>
-          <div class="names-list">
-            ${s.names.map((n,i) => `<input data-idx="${i}" value="${n.replace(/"/g,'&quot;')}" />`).join("")}
-          </div>
-        </details>
-      </div>
-    `;
-    actionbar.innerHTML = `<button class="btn btn-primary" id="startBtn">🔀 Repartir diagnóstico</button>`;
-
-    const maxImpostors = () => Math.max(1, Math.min(3, state.playerCount - 2));
-    content.querySelector("#dec").onclick = () => { state.playerCount = Math.max(4, state.playerCount - 1); state.impostorCount = Math.min(state.impostorCount, maxImpostors()); ensureNamesLength(); render(); };
-    content.querySelector("#inc").onclick = () => { state.playerCount = Math.min(14, state.playerCount + 1); ensureNamesLength(); render(); };
-    content.querySelector("#impDec").onclick = () => { state.impostorCount = Math.max(1, state.impostorCount - 1); render(); };
-    content.querySelector("#impInc").onclick = () => { state.impostorCount = Math.min(maxImpostors(), state.impostorCount + 1); render(); };
-    content.querySelectorAll(".level-btn[data-level]").forEach(b => b.onclick = () => set({ level: b.dataset.level }));
-    content.querySelectorAll(".level-btn[data-sec]").forEach(b => b.onclick = () => set({ discussionSeconds: Number(b.dataset.sec) }));
-    content.querySelectorAll(".names-list input").forEach(inp => inp.oninput = (e) => {
-      state.names[Number(e.target.dataset.idx)] = e.target.value;
-    });
-    actionbar.querySelector("#startBtn").onclick = startGame;
-  }
-
-  else if (s.phase === "announce") {
-    content.innerHTML = `
-      <div class="screen center">
-        <div class="eyebrow">❤️ <span>Antes de repartir las fichas</span></div>
-        <h2 class="title font-display">${s.announceRevealed ? "Ya está decidido" : "¿Todos listos y prestando atención?"}</h2>
-        <p class="sub">${s.announceRevealed ? "Anúncienlo en voz alta antes de empezar a pasar el teléfono." : "Toca el botón para revelar quién abre la ronda de pistas."}</p>
-        ${s.announceRevealed ? `
-          <div class="announce-box">
-            <div class="eyebrow2">Empieza hablando</div>
-            <div class="name">${s.names[s.starterIndex]}</div>
-          </div>
-        ` : ""}
-      </div>
-    `;
-    if (!s.announceRevealed) {
-      actionbar.innerHTML = `<button class="btn btn-accent" id="startTalkBtn">▶ Começar</button>`;
-      actionbar.querySelector("#startTalkBtn").onclick = () => set({ announceRevealed: true });
-    } else {
-      actionbar.innerHTML = `<button class="btn btn-accent" id="toReveal">Empezar a repartir fichas →</button>`;
-      actionbar.querySelector("#toReveal").onclick = () => set({ phase: "reveal" });
-    }
-  }
-
-  else if (s.phase === "reveal") {
-    const isImpostor = s.impostorIndices.includes(s.currentIndex);
-    content.innerHTML = `
-      <div class="screen center">
-        <div class="eyebrow" style="justify-content:center;">Paciente ${s.currentIndex + 1} de ${s.playerCount}</div>
-        <h2 class="title font-display">Entrega el teléfono a<br><span style="color:#f2b880">${s.names[s.currentIndex]}</span></h2>
-        ${s.revealed ? `
-          ${isImpostor ? `
-            <div class="paper impostor">
-              <div class="clip">📎</div>
-              <div><span class="stamp">SIN DIAGNÓSTICO</span></div>
-              <p class="note">Eres el <strong>IMPOSTOR</strong>. No conoces la enfermedad: improvisa con lo que digan los demás y no te delates.</p>
-            </div>
-          ` : `
-            <div class="paper doctor">
-              <div class="clip">📎</div>
-              <div class="eyebrow2">Diagnóstico confirmado</div>
-              <div class="diag">${s.disease}</div>
-              <p class="note">Da pistas sobre esta enfermedad sin decir su nombre. Ayuda a descubrir al impostor.</p>
-            </div>
-          `}
-        ` : ""}
-      </div>
-    `;
-    if (!s.revealed) {
-      actionbar.innerHTML = `<button class="btn btn-accent" id="revealBtn">👁 Ver mi ficha médica</button>`;
-      actionbar.querySelector("#revealBtn").onclick = () => set({ revealed: true });
-    } else {
-      actionbar.innerHTML = `<button class="btn btn-muted" id="nextBtn">🙈 Ocultar y pasar el teléfono →</button>`;
-      actionbar.querySelector("#nextBtn").onclick = nextPlayer;
-    }
-  }
-
-  else if (s.phase === "discussion") {
-    content.innerHTML = `
-      <div class="screen center">
-        <div class="eyebrow" style="justify-content:center;">💓 <span>Sala de discusión</span></div>
-        <h2 class="title font-display">Den pistas y debatan quién es el impostor</h2>
-        <div class="starter-box">
-          <div class="eyebrow2">Empieza a dar la primera pista</div>
-          <div class="name">${s.names[s.starterIndex]}</div>
-          <div class="hint">Después se sigue por orden, en ronda, hacia la derecha.</div>
-        </div>
-        <div class="timer" style="color:${s.seconds===0?'#c1432e':'#f2b880'}">${fmtTime(s.seconds)}</div>
-        <p class="sub" style="margin-top:0; color:${s.seconds===0?'#c1432e':'#8fa6b8'}">
-          ${s.seconds === 0 ? "¡Tiempo terminado! Voten ahora, a la cuenta de tres." : "Nadie dice el nombre de la enfermedad en voz alta."}
-        </p>
-      </div>
-    `;
-    actionbar.innerHTML = `
-      <div class="btn-row">
-        <button class="btn btn-accent" id="timerToggle">${s.running ? "⏸ Pausar" : "▶ Iniciar"}</button>
-        <button class="btn-square" id="timerReset">🔄</button>
-      </div>
-      <button class="btn btn-primary" id="toVote">Ir a votación</button>
-    `;
-    actionbar.querySelector("#timerToggle").onclick = toggleTimer;
-    actionbar.querySelector("#timerReset").onclick = resetTimer;
-    actionbar.querySelector("#toVote").onclick = () => { clearInterval(timerInterval); set({ phase: "result" }); };
-  }
-
-  else if (s.phase === "result") {
-    content.innerHTML = `
-      <div class="screen center">
-        <div style="font-size:20px; margin-bottom:8px;">⏱</div>
-        <h2 class="title font-display">Votación</h2>
-        <p class="sub">Todos señalan a la cuenta de tres a quien creen impostor. Cuando quieran confirmar, revelen la ficha final.</p>
-        ${s.resultShown ? `
-          <div class="paper impostor">
-            <div class="eyebrow2">${s.impostorIndices.length > 1 ? "Los impostores eran" : "El impostor era"}</div>
-            <div class="diag" style="margin-bottom:12px;">${s.impostorIndices.map(i => s.names[i]).join(" · ")}</div>
-            <div class="eyebrow2">La enfermedad era</div>
-            <div class="diag" style="color:#c1432e;">${s.disease}</div>
-          </div>
-        ` : ""}
-      </div>
-    `;
-    if (!s.resultShown) {
-      actionbar.innerHTML = `<button class="btn btn-primary" id="revealFinal">Revelar impostor</button>`;
-      actionbar.querySelector("#revealFinal").onclick = () => set({ resultShown: true });
-    } else {
-      actionbar.innerHTML = `
-        <div class="btn-row">
-          <button class="btn btn-accent" id="againBtn">🔀 Otra ronda</button>
-          <button class="btn btn-muted" id="newBtn">Nueva partida</button>
-        </div>
-      `;
-      actionbar.querySelector("#againBtn").onclick = startGame;
-      actionbar.querySelector("#newBtn").onclick = fullReset;
-    }
-  }
-}
-
 render();
-
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("service-worker.js").catch(() => {});
-  });
-}
+if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("service-worker.js").catch(()=>{}));
 </script>
 </body>
 </html>
