@@ -16,9 +16,10 @@
 <style>
 :root{--bg:#0C0D10;--s1:#15171C;--s2:#1D2027;--ln:#272B34;--tx:#ECEAE4;--mu:#8B909C;--rd:#E5484D;--gn:#3DB07F;--gd:#E0B050}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;margin:0;background:var(--bg);color:var(--tx);font-family:'Barlow',system-ui,sans-serif;overscroll-behavior:none}
+html,body{position:fixed;inset:0;width:100%;height:100%;overflow:hidden;margin:0;-webkit-text-size-adjust:100%;background:var(--bg);color:var(--tx);font-family:'Barlow',system-ui,sans-serif;overscroll-behavior:none}
 button{font-family:inherit;cursor:pointer}
-#shell{height:100dvh;max-width:480px;margin:0 auto;display:flex;flex-direction:column;border-inline:1px solid var(--ln)}
+*{scrollbar-width:none}*::-webkit-scrollbar{display:none;width:0;height:0}
+#shell{height:100%;width:100%;overflow:hidden;max-width:480px;margin:0 auto;display:flex;flex-direction:column;border-inline:1px solid var(--ln)}
 #top{display:flex;align-items:center;gap:10px;padding:calc(12px + env(safe-area-inset-top)) 16px 12px}
 #top img{width:32px;height:32px;border-radius:8px}
 #top b{font:700 20px 'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase}
@@ -26,7 +27,7 @@ button{font-family:inherit;cursor:pointer}
 .chip{font:600 13px 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--gd);border:1px solid var(--ln);padding:5px 9px;border-radius:6px;display:inline-flex;align-items:center;gap:6px}
 .ib{width:34px;height:34px;border-radius:8px;border:1px solid var(--ln);background:var(--s1);color:var(--tx);display:flex;align-items:center;justify-content:center}
 #prog{height:3px;background:var(--ln)}#prog i{display:block;height:3px;background:var(--gd);transition:width .3s}
-#main{flex:1;overflow-y:auto;padding:20px 16px}
+#main{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:20px 16px;width:100%}
 #act{padding:12px 16px 8px;display:flex;flex-direction:column;gap:10px}
 #by{text-align:center;font-size:11px;color:var(--mu);padding:0 16px calc(10px + env(safe-area-inset-bottom))}#by a{color:var(--tx);text-decoration:none;font-weight:600}
 .btn{font:700 20px 'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase;height:54px;border-radius:10px;border:0;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;color:#0C0D10;background:var(--tx);box-shadow:0 4px 0 #8f8d87;transition:transform .08s,box-shadow .08s}
@@ -35,7 +36,7 @@ button{font-family:inherit;cursor:pointer}
 .btn.gn{background:var(--gn);color:#06130d;box-shadow:0 4px 0 #226b4b}.btn.gn:active{box-shadow:0 1px 0 #226b4b}
 .btn.gh{background:var(--s2);color:var(--tx);border:1px solid var(--ln);box-shadow:0 4px 0 #07080a}.btn.gh:active{box-shadow:0 1px 0 #07080a}
 .row{display:flex;gap:10px}.row .btn{flex:1}
-.pn{background:var(--s1);border:1px solid var(--ln);border-radius:12px;overflow:hidden}
+.pn{width:100%;background:var(--s1);border:1px solid var(--ln);border-radius:12px;overflow:hidden}
 .st{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--ln)}.st:last-child{border:0}
 .st label,.st .nmx{flex:1;font-weight:600;font-size:15px}
 .num{display:flex;align-items:center;gap:6px}.num button{width:32px;height:32px;border-radius:8px;border:1px solid var(--ln);background:var(--s2);color:var(--tx);font-size:18px}
@@ -44,9 +45,9 @@ button{font-family:inherit;cursor:pointer}
 .seg button{flex:1;border:0;background:none;color:var(--mu);font:600 15px 'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:8px 0;border-radius:6px}
 .seg .on{background:var(--tx);color:#0C0D10}
 .lb{font:600 13px 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin:22px 2px 8px}
-.ro{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.ro div{display:flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--ln);border-radius:10px;padding:6px 10px}
-.ro input{min-width:0;flex:1;background:none;border:0;color:var(--tx);font:500 14px 'Barlow',sans-serif;outline:0}
+.ro{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%}
+.ro div{min-width:0;display:flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--ln);border-radius:10px;padding:6px 10px}
+.ro input{min-width:0;width:100%;flex:1;background:none;border:0;color:var(--tx);font:500 14px 'Barlow',sans-serif;outline:0}
 .ct{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px}
 .ct .lb{margin:0}
 .cd,h1{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-weight:700;margin:0}
