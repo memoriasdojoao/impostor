@@ -20,15 +20,19 @@ html,body{position:fixed;inset:0;width:100%;height:100%;overflow:hidden;margin:0
 button{font-family:inherit;cursor:pointer}
 *{scrollbar-width:none}*::-webkit-scrollbar{display:none;width:0;height:0}
 #shell{height:100%;width:100%;overflow:hidden;max-width:480px;margin:0 auto;display:flex;flex-direction:column;border-inline:1px solid var(--ln)}
-#top{display:flex;align-items:center;gap:10px;padding:calc(12px + env(safe-area-inset-top)) 16px 12px}
+#top{display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
 #top img{width:32px;height:32px;border-radius:8px}
-#top b{font:700 20px 'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase}
+#top b{font:700 20px 'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.chip{white-space:nowrap}
+.btn{line-height:1.1;padding:0 10px}
+@media(max-width:350px){#top b{font-size:17px;letter-spacing:.05em}}
 .sp{margin-left:auto;display:flex;gap:8px;align-items:center}
 .chip{font:600 13px 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--gd);border:1px solid var(--ln);padding:5px 9px;border-radius:6px;display:inline-flex;align-items:center;gap:6px}
 .ib{width:34px;height:34px;border-radius:8px;border:1px solid var(--ln);background:var(--s1);color:var(--tx);display:flex;align-items:center;justify-content:center}
 #prog{height:3px;background:var(--ln)}#prog i{display:block;height:3px;background:var(--gd);transition:width .3s}
-#main{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:20px 16px;width:100%;touch-action:pan-y}
-#act{padding:12px 16px 8px;display:flex;flex-direction:column;gap:10px}
+#main{flex:1;min-height:0;overflow:hidden;padding:10px 16px;width:100%;position:relative}
+#fit{width:100%;min-height:100%;display:flex;flex-direction:column;justify-content:center;transform-origin:top left}
+#act{padding:8px 16px 6px;display:flex;flex-direction:column;gap:10px}
 #by{text-align:center;font-size:11px;color:var(--mu);padding:0 16px calc(10px + env(safe-area-inset-bottom))}#by a{color:var(--tx);text-decoration:none;font-weight:600}
 .btn{font:700 20px 'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase;height:54px;border-radius:10px;border:0;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;color:#0C0D10;background:var(--tx);box-shadow:0 4px 0 #8f8d87;transition:transform .08s,box-shadow .08s}
 .btn:active{transform:translateY(3px);box-shadow:0 1px 0 #8f8d87}
@@ -39,6 +43,9 @@ button{font-family:inherit;cursor:pointer}
 .pn{width:100%;background:var(--s1);border:1px solid var(--ln);border-radius:12px;overflow:hidden}
 .st{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--ln)}.st:last-child{border:0}
 .st label,.st .nmx{flex:1;font-weight:600;font-size:15px}
+.nmx{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sm{height:44px;font-size:17px}
+.rb{display:grid;gap:6px;width:100%}.rw{display:flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--ln);border-radius:10px;padding:6px 10px;min-width:0}.rw .nmx{flex:1;font-weight:600;font-size:14px}
 .num{display:flex;align-items:center;gap:6px}.num button{width:32px;height:32px;border-radius:8px;border:1px solid var(--ln);background:var(--s2);color:var(--tx);font-size:18px}
 .num span{width:28px;text-align:center;font:700 24px 'Barlow Condensed',sans-serif}
 .seg{display:flex;background:var(--s2);border-radius:8px;padding:3px;gap:3px;margin:0 14px 14px}
@@ -47,8 +54,8 @@ button{font-family:inherit;cursor:pointer}
 .lb{font:600 13px 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin:22px 2px 8px}
 .ro{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%}
 .ro div{min-width:0;display:flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--ln);border-radius:10px;padding:6px 10px}
-.ro input{min-width:0;width:100%;flex:1;background:none;border:0;color:var(--tx);font:500 14px 'Barlow',sans-serif;outline:0}
-.ct{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px}
+.ro input{min-width:0;width:100%;flex:1;background:none;border:0;color:var(--tx);font:500 16px 'Barlow',sans-serif;outline:0}
+.ct{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px}
 .ct .lb{margin:0}
 .cd,h1{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-weight:700;margin:0}
 h1{font-size:42px;line-height:1}
@@ -59,7 +66,7 @@ h1{font-size:42px;line-height:1}
 .tg{display:inline-block;font:700 13px 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:4px 9px;border-radius:5px;background:var(--gn);color:#06130d}.tg.r{background:var(--rd);color:#fff}
 .big{font:700 42px/1 'Barlow Condensed',sans-serif;text-transform:uppercase;margin:12px 0 2px;word-break:break-word}
 .sq{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:320px}
-.rg{position:relative;width:240px;height:240px}
+.rg{position:relative;width:220px;height:220px}
 .tm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 64px 'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums}
 .rk{width:22px;font:700 20px 'Barlow Condensed',sans-serif;color:var(--mu)}
 .pt{font:700 26px 'Barlow Condensed',sans-serif;color:var(--gd)}
@@ -72,7 +79,7 @@ h1{font-size:42px;line-height:1}
 </style>
 </head>
 <body>
-<div id="shell"><div id="top"></div><div id="prog"></div><div id="main"></div><div id="act"></div><div id="by">Desenvolvido por <a href="https://www.instagram.com/cruzavam" target="_blank" rel="noopener">@cruzavam</a> · v5</div></div>
+<div id="shell"><div id="top"></div><div id="prog"></div><div id="main"></div><div id="act"></div><div id="by">Desenvolvido por <a href="https://www.instagram.com/cruzavam" target="_blank" rel="noopener">@cruzavam</a> · v6</div></div>
 <div id="toast"></div>
 <script>
 const D={
@@ -110,13 +117,13 @@ function upd(){const t=$("tm");if(!t)return;t.textContent=fmt(s.sec);t.style.col
 function tick(){s.sec--;if(s.sec<=0){s.sec=0;clearInterval(iv);s.run=false;try{navigator.vibrate&&navigator.vibrate([300,100,300])}catch(e){}render()}else upd()}
 function tog(){if(s.sec<=0)return;s.run=!s.run;clearInterval(iv);if(s.run)iv=setInterval(tick,1000);$("tg").innerHTML=s.run?ic("pause")+" Pausar":ic("play")+" Iniciar"}
 function pick(w){s.win=w;s.dl=s.sc.map((_,i)=>w==="crew"?(s.imp.includes(i)?0:1):(s.imp.includes(i)?2:0));s.sc=s.sc.map((v,i)=>v+s.dl[i]);save();render()}
-function render(){
+var render=function(){
 const M=$("main"),A=$("act");
-$("top").innerHTML=`<img src="icon-192.png" alt=""><b>Impostor Médico</b><div class="sp">${s.ph!=="setup"?`<span class="chip">Ronda ${s.round}</span>`:""}<button class="ib" id="sh">${ic("share",16)}</button></div>`;
+$("top").innerHTML=`<img src="icon-192.png" alt=""><b>Impostor Médico</b><div class="sp">${["reveal","ready","discussion","result"].includes(s.ph)?`<span class="chip">Ronda ${s.round}</span>`:""}<button class="ib" id="sh">${ic("share",16)}</button></div>`;
 on("sh",share);
 const pct=s.ph==="setup"?0:s.ph==="reveal"?(s.i+(s.rv?1:0))/s.n*100:100;
 $("prog").innerHTML=`<i style="width:${pct}%"></i>`;
-M.scrollTop=0;
+
 if(s.ph==="setup"){
 const any=s.sc.some(v=>v>0);
 M.innerHTML=`<div class="in"><div class="lb" style="margin-top:0">Partida</div><div class="pn">
@@ -124,15 +131,18 @@ M.innerHTML=`<div class="in"><div class="lb" style="margin-top:0">Partida</div><
 <div class="st">${bean("#E5484D",18)}<label>Impostores</label><div class="num"><button id="kd">−</button><span>${s.k}</span><button id="ki">+</button></div></div>
 <div class="st" style="border:0;padding-bottom:8px">${ic("bars")}<label>Dificultad</label></div><div class="seg">${Object.keys(LV).map(k=>`<button data-lv="${k}" class="${s.lv===k?"on":""}">${LV[k]}</button>`).join("")}</div>
 <div class="st" style="border:0;padding-bottom:8px">${ic("clock")}<label>Tiempo de debate</label></div><div class="seg">${[60,90,120,180].map(x=>`<button data-t="${x}" class="${s.t===x?"on":""}">${fmt(x).replace(/^0/,"")}</button>`).join("")}</div>
-</div><div class="lb">Jugadores</div><div class="ro">${s.names.map((n,i)=>`<div>${bean(COL[i],24)}<input data-i="${i}" value="${n.replace(/"/g,"&quot;")}" maxlength="16"></div>`).join("")}</div>
-${any?`<div class="lb">Marcador</div><button class="btn gh" id="rp">Reiniciar puntos</button>`:""}</div>`;
+</div><div class="row" style="margin-top:12px"><button class="btn gh sm" id="nms">Nombres</button>${any?`<button class="btn gh sm" id="rp">Reiniciar puntos</button>`:""}</div></div>`;
 A.innerHTML=`<button class="btn" id="go">${ic("play")} Jugar</button>`;
 on("nd",()=>{s.n=Math.max(4,s.n-1);fit();render()});on("ni",()=>{s.n=Math.min(14,s.n+1);fit();render()});
 on("kd",()=>{s.k=Math.max(1,s.k-1);render()});on("ki",()=>{s.k=Math.min(maxK(),s.k+1);render()});
 M.querySelectorAll("[data-lv]").forEach(b=>b.onclick=()=>{s.lv=b.dataset.lv;save();render()});
 M.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{s.t=+b.dataset.t;save();render()});
-M.querySelectorAll("input").forEach(e=>e.oninput=()=>{s.names[+e.dataset.i]=e.value;save()});
+on("nms",()=>{s.ph="names";render()});
 on("rp",()=>{s.sc=s.sc.map(()=>0);s.round=0;save();render()});on("go",start);
+}else if(s.ph==="names"){
+M.innerHTML=`<div class="in"><div class="lb" style="margin-top:0">Nombres de los jugadores</div><div class="ro">${s.names.map((n,i)=>`<div>${bean(COL[i],24)}<input data-i="${i}" value="${n.replace(/"/g,"&quot;")}" maxlength="14"></div>`).join("")}</div></div>`;
+A.innerHTML=`<button class="btn" id="a">Listo</button>`;
+M.querySelectorAll("input").forEach(e=>e.oninput=()=>{s.names[+e.dataset.i]=e.value;save()});on("a",()=>{s.ph="setup";render()});
 }else if(s.ph==="reveal"){
 const imp=s.imp.includes(s.i);
 M.innerHTML=`<div class="ct in"><div class="lb">Jugador ${s.i+1} de ${s.n}</div>${bean(COL[s.i],96)}<h1>${nm(s.i)}</h1>${!s.rv?`<p class="mu">Pásale el teléfono a ${nm(s.i)}. Nadie más debe mirar la pantalla.</p>`:imp?`<div class="card imp"><span class="tg r">Impostor</span><div class="big">Sin diagnóstico</div><p>No conoces la enfermedad. Escucha, improvisa y no te delates.</p></div>`:`<div class="card"><span class="tg">Médico</span><div class="big">${s.dis}</div><p>Da pistas sin decir el nombre. Ayuda a descubrir al impostor.</p></div>`}</div>`;
@@ -144,7 +154,7 @@ A.innerHTML=!s.sr?`<button class="btn" id="a">${ic("play")} Comenzar</button>`:`
 on("a",()=>{if(!s.sr)s.sr=true;else s.ph="discussion";render()});
 }else if(s.ph==="discussion"){
 const f=s.sec/s.t;
-M.innerHTML=`<div class="ct in"><div class="lb">Debate</div><div class="rg"><svg viewBox="0 0 200 200" width="240" height="240"><circle cx="100" cy="100" r="88" fill="none" stroke="#272B34" stroke-width="10"/><circle id="rg" cx="100" cy="100" r="88" fill="none" stroke="${ringCol()}" stroke-width="10" stroke-linecap="round" stroke-dasharray="553" stroke-dashoffset="${553*(1-f)}" transform="rotate(-90 100 100)"/></svg><div class="tm" id="tm" style="color:${ringCol()}">${fmt(s.sec)}</div></div><span class="chip" style="color:var(--tx)">Abre ${bean(COL[s.st],18)} ${nm(s.st)}</span><p class="mu">${s.sec===0?"¡Tiempo! Voten ahora, a la cuenta de tres.":"Una pista por turno. Nadie dice el nombre de la enfermedad."}</p></div>`;
+M.innerHTML=`<div class="ct in"><div class="lb">Debate</div><div class="rg"><svg viewBox="0 0 200 200" width="220" height="220"><circle cx="100" cy="100" r="88" fill="none" stroke="#272B34" stroke-width="10"/><circle id="rg" cx="100" cy="100" r="88" fill="none" stroke="${ringCol()}" stroke-width="10" stroke-linecap="round" stroke-dasharray="553" stroke-dashoffset="${553*(1-f)}" transform="rotate(-90 100 100)"/></svg><div class="tm" id="tm" style="color:${ringCol()}">${fmt(s.sec)}</div></div><span class="chip" style="color:var(--tx)">Abre ${bean(COL[s.st],18)} ${nm(s.st)}</span><p class="mu">${s.sec===0?"¡Tiempo! Voten ahora, a la cuenta de tres.":"Una pista por turno. Nadie dice el nombre de la enfermedad."}</p></div>`;
 A.innerHTML=`<div class="row"><button class="btn" id="tg">${s.run?ic("pause")+" Pausar":ic("play")+" Iniciar"}</button><button class="btn gh" id="rt" style="flex:0 0 58px">${ic("reset")}</button></div><button class="btn rd" id="vt">Votar</button>`;
 on("tg",tog);on("rt",()=>{clearInterval(iv);s.sec=s.t;s.run=false;render()});on("vt",()=>{clearInterval(iv);s.run=false;s.ph="result";render()});
 }else if(s.ph==="result"){
@@ -157,11 +167,16 @@ A.innerHTML=`<button class="btn gn" id="c">Ganaron los médicos · +1</button><b
 on("c",()=>pick("crew"));on("m",()=>pick("imp"));
 }else{
 const ord=s.sc.map((v,i)=>i).sort((a,b)=>s.sc[b]-s.sc[a]);
-M.innerHTML=`<div class="in"><div class="lb" style="margin-top:0">${s.win==="crew"?"Ganaron los médicos":s.k>1?"Ganaron los impostores":"Ganó el impostor"}</div><div class="pn">${ord.map((i,r)=>`<div class="st"><span class="rk" style="${r===0?"color:var(--gd)":""}">${r+1}</span>${bean(COL[i],28)}<span class="nmx">${nm(i)}</span>${s.dl[i]?`<span class="dl">+${s.dl[i]}</span>`:""}<span class="pt">${s.sc[i]}</span></div>`).join("")}</div></div>`;
+M.innerHTML=`<div class="in"><div class="lb" style="margin-top:0">${s.win==="crew"?"Ganaron los médicos":s.k>1?"Ganaron los impostores":"Ganó el impostor"}</div><div class="rb" style="grid-template-columns:repeat(${s.n>7?2:1},minmax(0,1fr))">${ord.map((i,r)=>`<div class="rw"><span class="rk" style="${r===0?"color:var(--gd)":""}">${r+1}</span>${bean(COL[i],s.n>7?22:28)}<span class="nmx">${nm(i)}</span>${s.dl[i]?`<span class="dl">+${s.dl[i]}</span>`:""}<span class="pt">${s.sc[i]}</span></div>`).join("")}</div></div>`;
 A.innerHTML=`<button class="btn" id="a">Siguiente ronda ${ic("arrow")}</button><button class="btn gh" id="b">Menú</button>`;
 on("a",start);on("b",()=>{s.ph="setup";render()});
 }}
 }
+function fitScreen(){const M=$("main"),f=$("fit");if(!f)return;f.style.zoom=1;f.style.width="100%";f.style.minHeight="0";
+const cs=getComputedStyle(M),av=M.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom),hh=f.scrollHeight;f.style.minHeight="";
+if(hh>av){const z=Math.max(.5,av/hh);f.style.zoom=z}}
+const _r=render;render=function(){_r();const M=$("main"),w=document.createElement("div");w.id="fit";while(M.firstChild)w.appendChild(M.firstChild);M.appendChild(w);fitScreen()};
+addEventListener("resize",fitScreen);addEventListener("orientationchange",()=>setTimeout(fitScreen,200));if(document.fonts)document.fonts.ready.then(fitScreen);
 render();
 if("serviceWorker" in navigator){const had=!!navigator.serviceWorker.controller;let rl=0;
 navigator.serviceWorker.addEventListener("controllerchange",()=>{if(had&&!rl){rl=1;location.reload()}});
