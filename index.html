@@ -79,14 +79,27 @@ h1{font-size:42px;line-height:1}
 </style>
 </head>
 <body>
-<div id="shell"><div id="top"></div><div id="prog"></div><div id="main"></div><div id="act"></div><div id="by">Desenvolvido por <a href="https://www.instagram.com/cruzavam" target="_blank" rel="noopener">@cruzavam</a> · v6</div></div>
+<div id="shell"><div id="top"></div><div id="prog"></div><div id="main"></div><div id="act"></div><div id="by">Desenvolvido por <a href="https://www.instagram.com/cruzavam" target="_blank" rel="noopener">@cruzavam</a> · v7</div></div>
 <div id="toast"></div>
 <script>
-const D={
-facil:"Diabetes,Hipertensión,Asma,Migraña,Anemia,Varicela,Gripe,Neumonía,Apendicitis,Conjuntivitis,Amigdalitis,Otitis,Gastritis,Bronquitis,Sarampión,Dermatitis,Insomnio,Obesidad,Alergia alimentaria,Resfriado común,Covid-19,Dengue,Malaria,Tuberculosis,Hepatitis,Cáncer,Infarto,Depresión,Ansiedad,Rubéola,Paperas,Tos ferina,Cólera,Tétanos,Rabia,VIH/Sida,Herpes,Acné,Alopecia,Hemorroides,Estreñimiento,Diarrea,Intoxicación alimentaria,Cistitis,Hernia,Fractura,Esguince,Caries,Miopía,Lumbalgia,Ciática,Colesterol alto,Gota,Hipoglucemia,Deshidratación,Insolación,Mononucleosis,Zika,Polio,Derrame cerebral".split(","),
-intermedio:"Artritis reumatoide,Hipotiroidismo,Hipertiroidismo,Osteoporosis,Colitis ulcerosa,Epilepsia,Cálculos renales,Úlcera péptica,Cirrosis hepática,Fibromialgia,Psoriasis,Vértigo posicional,Reflujo gastroesofágico,Tendinitis,Escoliosis,Sinusitis crónica,Varices,Cataratas,Glaucoma,Anorexia nerviosa".split(","),
-dificil:"Lupus eritematoso,Esclerosis múltiple,Enfermedad de Crohn,Fibrosis quística,Síndrome de Guillain-Barré,Enfermedad de Parkinson,Enfermedad de Alzheimer,Miastenia gravis,Hemofilia,Anemia falciforme,Enfermedad de Wilson,Síndrome de Cushing,Enfermedad de Addison,Espondilitis anquilosante,Síndrome de Sjögren,Enfermedad de Graves,Amiloidosis,Porfiria".split(",")};
-const LV={todas:"Todas",facil:"Fácil",intermedio:"Medio",dificil:"Difícil"};
+const DES={es:{facil:"Diabetes,Hipertensión,Asma,Migraña,Anemia,Varicela,Gripe,Neumonía,Apendicitis,Conjuntivitis,Amigdalitis,Otitis,Gastritis,Bronquitis,Sarampión,Dermatitis,Insomnio,Obesidad,Alergia alimentaria,Resfriado común,Covid-19,Dengue,Malaria,Tuberculosis,Hepatitis,Cáncer,Infarto,Depresión,Ansiedad,Rubéola,Paperas,Tos ferina,Cólera,Tétanos,Rabia,VIH/Sida,Herpes,Acné,Alopecia,Hemorroides,Estreñimiento,Diarrea,Intoxicación alimentaria,Cistitis,Hernia,Fractura,Esguince,Caries,Miopía,Lumbalgia,Ciática,Colesterol alto,Gota,Hipoglucemia,Deshidratación,Insolación,Mononucleosis,Zika,Polio,Derrame cerebral",
+intermedio:"Artritis reumatoide,Hipotiroidismo,Hipertiroidismo,Osteoporosis,Colitis ulcerosa,Epilepsia,Cálculos renales,Úlcera péptica,Cirrosis hepática,Fibromialgia,Psoriasis,Vértigo posicional,Reflujo gastroesofágico,Tendinitis,Escoliosis,Sinusitis crónica,Varices,Cataratas,Glaucoma,Anorexia nerviosa",
+dificil:"Lupus eritematoso,Esclerosis múltiple,Enfermedad de Crohn,Fibrosis quística,Síndrome de Guillain-Barré,Enfermedad de Parkinson,Enfermedad de Alzheimer,Miastenia gravis,Hemofilia,Anemia falciforme,Enfermedad de Wilson,Síndrome de Cushing,Enfermedad de Addison,Espondilitis anquilosante,Síndrome de Sjögren,Enfermedad de Graves,Amiloidosis,Porfiria"},
+pt:{facil:"Diabetes,Hipertensão,Asma,Enxaqueca,Anemia,Catapora,Gripe,Pneumonia,Apendicite,Conjuntivite,Amigdalite,Otite,Gastrite,Bronquite,Sarampo,Dermatite,Insônia,Obesidade,Alergia alimentar,Resfriado,Covid-19,Dengue,Malária,Tuberculose,Hepatite,Câncer,Infarto,Depressão,Ansiedade,Rubéola,Caxumba,Coqueluche,Cólera,Tétano,Raiva,HIV/Aids,Herpes,Acne,Alopecia,Hemorroidas,Constipação,Diarreia,Intoxicação alimentar,Cistite,Hérnia,Fratura,Entorse,Cárie,Miopia,Lombalgia,Ciática,Colesterol alto,Gota,Hipoglicemia,Desidratação,Insolação,Mononucleose,Zika,Poliomielite,AVC",
+intermedio:"Artrite reumatoide,Hipotireoidismo,Hipertireoidismo,Osteoporose,Colite ulcerativa,Epilepsia,Pedra nos rins,Úlcera péptica,Cirrose hepática,Fibromialgia,Psoríase,Vertigem posicional,Refluxo gastroesofágico,Tendinite,Escoliose,Sinusite crônica,Varizes,Catarata,Glaucoma,Anorexia nervosa",
+dificil:"Lúpus eritematoso,Esclerose múltipla,Doença de Crohn,Fibrose cística,Síndrome de Guillain-Barré,Doença de Parkinson,Doença de Alzheimer,Miastenia gravis,Hemofilia,Anemia falciforme,Doença de Wilson,Síndrome de Cushing,Doença de Addison,Espondilite anquilosante,Síndrome de Sjögren,Doença de Graves,Amiloidose,Porfiria"},
+en:{facil:"Diabetes,Hypertension,Asthma,Migraine,Anemia,Chickenpox,Flu,Pneumonia,Appendicitis,Conjunctivitis,Tonsillitis,Ear infection,Gastritis,Bronchitis,Measles,Dermatitis,Insomnia,Obesity,Food allergy,Common cold,Covid-19,Dengue,Malaria,Tuberculosis,Hepatitis,Cancer,Heart attack,Depression,Anxiety,Rubella,Mumps,Whooping cough,Cholera,Tetanus,Rabies,HIV/AIDS,Herpes,Acne,Alopecia,Hemorrhoids,Constipation,Diarrhea,Food poisoning,Cystitis,Hernia,Fracture,Sprain,Cavities,Myopia,Low back pain,Sciatica,High cholesterol,Gout,Hypoglycemia,Dehydration,Sunstroke,Mononucleosis,Zika,Polio,Stroke",
+intermedio:"Rheumatoid arthritis,Hypothyroidism,Hyperthyroidism,Osteoporosis,Ulcerative colitis,Epilepsy,Kidney stones,Peptic ulcer,Liver cirrhosis,Fibromyalgia,Psoriasis,Positional vertigo,Acid reflux,Tendinitis,Scoliosis,Chronic sinusitis,Varicose veins,Cataracts,Glaucoma,Anorexia nervosa",
+dificil:"Lupus erythematosus,Multiple sclerosis,Crohn's disease,Cystic fibrosis,Guillain-Barré syndrome,Parkinson's disease,Alzheimer's disease,Myasthenia gravis,Hemophilia,Sickle cell anemia,Wilson's disease,Cushing's syndrome,Addison's disease,Ankylosing spondylitis,Sjögren's syndrome,Graves' disease,Amyloidosis,Porphyria"}};
+["es","pt","en"].forEach(l=>Object.keys(DES[l]).forEach(k=>DES[l][k]=DES[l][k].split(",")));
+const DN=()=>DES[s.lang||"es"][s.dis.l][s.dis.i];
+const L={
+es:{game:"Partida",players:"Jugadores",imps:"Impostores",diff:"Dificultad",time:"Tiempo de debate",all:"Todas",easy:"Fácil",mid:"Medio",hard:"Difícil",names:"Nombres",resetp:"Reiniciar puntos",play:"Jugar",namesT:"Nombres de los jugadores",done:"Listo",round:"Ronda",pl:"Jugador",of:"de",pass:"Pásale el teléfono a {x}. Nadie más debe mirar la pantalla.",imp:"Impostor",nodiag:"Sin diagnóstico",impnote:"No conoces la enfermedad. Escucha, improvisa y no te delates.",doc:"Médico",docnote:"Da pistas sin decir el nombre. Ayuda a descubrir al impostor.",seerole:"Ver mi rol",hidepass:"Ocultar y pasar",hidecont:"Ocultar y continuar",rolesdone:"Roles repartidos",allready:"Todos listos",readyp:"Cuando todos estén atentos, toquen Comenzar para saber quién abre la ronda.",start:"Comenzar",opens:"Abre la ronda",after:"Después se sigue en orden, hacia la derecha.",todebate:"Ir al debate",debate:"Debate",opensS:"Abre",timeup:"¡Tiempo! Voten ahora, a la cuenta de tres.",hint:"Una pista por turno. Nadie dice el nombre de la enfermedad.",pause:"Pausar",go:"Iniciar",vote:"Votar",voting:"Votación",who:"¿Quién es el impostor?",votep:"A la cuenta de tres, todos señalan a quien creen impostor. Después, revelen.",reveal:"Revelar",wereimps:"Los impostores eran",wasimp:"El impostor era",diswas:"La enfermedad era",dx:"Diagnóstico",whowon:"¿Quién ganó?",docswon:"Ganaron los médicos",impswon:"Ganaron los impostores",impwon:"Ganó el impostor",next:"Siguiente ronda",menu:"Menú",copied:"Enlace copiado",sharetxt:"Juega Impostor Médico con nosotros. ¡Descubre quién es el impostor!",copyp:"Copia el enlace"},
+pt:{game:"Partida",players:"Jogadores",imps:"Impostores",diff:"Dificuldade",time:"Tempo de debate",all:"Todas",easy:"Fácil",mid:"Médio",hard:"Difícil",names:"Nomes",resetp:"Zerar pontos",play:"Jogar",namesT:"Nomes dos jogadores",done:"Pronto",round:"Rodada",pl:"Jogador",of:"de",pass:"Passe o celular para {x}. Ninguém mais deve olhar a tela.",imp:"Impostor",nodiag:"Sem diagnóstico",impnote:"Você não conhece a doença. Ouça, improvise e não se entregue.",doc:"Médico",docnote:"Dê pistas sem dizer o nome. Ajude a descobrir o impostor.",seerole:"Ver meu papel",hidepass:"Ocultar e passar",hidecont:"Ocultar e continuar",rolesdone:"Papéis distribuídos",allready:"Todos prontos",readyp:"Quando todos estiverem atentos, toquem em Começar para saber quem abre a rodada.",start:"Começar",opens:"Abre a rodada",after:"Depois segue em ordem, para a direita.",todebate:"Ir ao debate",debate:"Debate",opensS:"Abre",timeup:"Tempo! Votem agora, na contagem de três.",hint:"Uma pista por vez. Ninguém diz o nome da doença.",pause:"Pausar",go:"Iniciar",vote:"Votar",voting:"Votação",who:"Quem é o impostor?",votep:"Na contagem de três, todos apontam quem acham que é o impostor. Depois, revelem.",reveal:"Revelar",wereimps:"Os impostores eram",wasimp:"O impostor era",diswas:"A doença era",dx:"Diagnóstico",whowon:"Quem ganhou?",docswon:"Os médicos ganharam",impswon:"Os impostores ganharam",impwon:"O impostor ganhou",next:"Próxima rodada",menu:"Menu",copied:"Link copiado",sharetxt:"Jogue Impostor Médico com a gente. Descubra quem é o impostor!",copyp:"Copie o link"},
+en:{game:"Game",players:"Players",imps:"Impostors",diff:"Difficulty",time:"Debate time",all:"All",easy:"Easy",mid:"Medium",hard:"Hard",names:"Names",resetp:"Reset points",play:"Play",namesT:"Player names",done:"Done",round:"Round",pl:"Player",of:"of",pass:"Pass the phone to {x}. Nobody else should look at the screen.",imp:"Impostor",nodiag:"No diagnosis",impnote:"You don't know the disease. Listen, improvise and don't give yourself away.",doc:"Doctor",docnote:"Give clues without saying the name. Help find the impostor.",seerole:"See my role",hidepass:"Hide and pass",hidecont:"Hide and continue",rolesdone:"Roles dealt",allready:"Everyone ready",readyp:"When everyone is paying attention, tap Start to see who opens the round.",start:"Start",opens:"Opens the round",after:"Then continue in order, to the right.",todebate:"Go to debate",debate:"Debate",opensS:"Opens",timeup:"Time's up! Vote now, on the count of three.",hint:"One clue per turn. Nobody says the disease name.",pause:"Pause",go:"Start",vote:"Vote",voting:"Voting",who:"Who is the impostor?",votep:"On the count of three, everyone points at who they think is the impostor. Then reveal.",reveal:"Reveal",wereimps:"The impostors were",wasimp:"The impostor was",diswas:"The disease was",dx:"Diagnosis",whowon:"Who won?",docswon:"The doctors won",impswon:"The impostors won",impwon:"The impostor won",next:"Next round",menu:"Menu",copied:"Link copied",sharetxt:"Play Impostor Médico with us. Find out who the impostor is!",copyp:"Copy the link"}};
+const T=k=>(L[s.lang]||L.es)[k];
+const isDef=n=>!n||/^(Jugador|Jogador|Player) \d+$/.test(n.trim());
+const LV={todas:"all",facil:"easy",intermedio:"mid",dificil:"hard"};
 const COL=["#D9534F","#4F7DF3","#3FAE6A","#E58AC1","#F09A3E","#E6D04F","#8C95A3","#E9EDF4","#8B5CF6","#9A6A3F","#35C9C0","#9BD94A","#B04A6E","#F0B7C6"];
 const IC={users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',bars:'<path d="M12 20V10M18 20V4M6 20v-4"/>',share:'<path d="M12 16V4M7 9l5-5 5 5M5 21h14a2 2 0 0 0 2-2v-4M5 21a2 2 0 0 1-2-2v-4"/>',play:'<path d="M6 4l14 8-14 8z" fill="currentColor"/>',pause:'<path d="M7 4v16M17 4v16"/>',reset:'<path d="M1 4v6h6M3.5 15a9 9 0 1 0 2.1-9.4L1 10"/>',eye:'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',eyeoff:'<path d="M17.9 17.9A10.9 10.9 0 0 1 12 20C5 20 1 12 1 12a18 18 0 0 1 5.1-5.9M9.9 4.2A10.7 10.7 0 0 1 12 4c7 0 11 8 11 8a18 18 0 0 1-2.2 3.2M1 1l22 22"/>',arrow:'<path d="M5 12h14M12 5l7 7-7 7"/>'};
 const ic=(n,z=18)=>`<svg width="${z}" height="${z}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${IC[n]}</svg>`;
@@ -95,44 +108,47 @@ const bean=(c,z=40)=>`<svg width="${z}" height="${z*1.1}" viewBox="0 0 40 44" st
 const $=id=>document.getElementById(id);
 const on=(id,f)=>{const e=$(id);if(e)e.onclick=f};
 const KEY="impmed2";
-let s={ph:"setup",n:10,k:1,lv:"todas",t:90,names:[],sc:[],round:0,i:0,rv:false,dis:"",imp:[],st:0,sr:false,sec:90,run:false,rs:false,win:null,dl:[]};
-try{const p=JSON.parse(localStorage.getItem(KEY)||"{}");["n","k","lv","t","names","sc","round"].forEach(x=>{if(p[x]!==undefined)s[x]=p[x]})}catch(e){}
+let s={ph:"setup",n:10,k:1,lv:"todas",t:90,names:[],sc:[],round:0,lang:"",i:0,rv:false,dis:"",imp:[],st:0,sr:false,sec:90,run:false,rs:false,win:null,dl:[]};
+try{const p=JSON.parse(localStorage.getItem(KEY)||"{}");["n","k","lv","t","names","sc","round","lang"].forEach(x=>{if(p[x]!==undefined)s[x]=p[x]})}catch(e){}
 const maxK=()=>Math.max(1,Math.min(3,s.n-2));
-function fit(){s.names=Array.from({length:s.n},(_,i)=>s.names[i]||"Jugador "+(i+1));s.sc=Array.from({length:s.n},(_,i)=>s.sc[i]||0);s.k=Math.min(s.k,maxK())}
-function save(){try{localStorage.setItem(KEY,JSON.stringify({n:s.n,k:s.k,lv:s.lv,t:s.t,names:s.names,sc:s.sc,round:s.round}))}catch(e){}}
-fit();
-const nm=i=>(s.names[i]||"").trim()||"Jugador "+(i+1);
+function fit(){s.names=Array.from({length:s.n},(_,i)=>s.names[i]||"");s.sc=Array.from({length:s.n},(_,i)=>s.sc[i]||0);s.k=Math.min(s.k,maxK())}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({n:s.n,k:s.k,lv:s.lv,t:s.t,names:s.names,sc:s.sc,round:s.round,lang:s.lang}))}catch(e){}}
+if(!s.lang)s.ph="lang";fit();
+const nm=i=>{const n=(s.names[i]||"").trim();return isDef(n)?T("pl")+" "+(i+1):n};
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const fmt=x=>String(Math.floor(x/60)).padStart(2,"0")+":"+String(x%60).padStart(2,"0");
 let iv,tt;
 function toast(m){const e=$("toast");e.textContent=m;e.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>e.classList.remove("on"),2000)}
-function share(){const d={title:"Impostor Médico",text:"Juega Impostor Médico con nosotros. ¡Descubre quién es el impostor!",url:location.href};
-if(navigator.share)navigator.share(d).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(d.url).then(()=>toast("Enlace copiado"));else prompt("Copia el enlace:",d.url)}
-function start(){const pool=s.lv==="todas"?[].concat(D.facil,D.intermedio,D.dificil):D[s.lv];
-s.dis=shuffle(pool)[0];s.imp=shuffle([...Array(s.n).keys()]).slice(0,s.k);s.st=Math.floor(Math.random()*s.n);
+function share(){const d={title:"Impostor Médico",text:T("sharetxt"),url:location.href};
+if(navigator.share)navigator.share(d).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(d.url).then(()=>toast(T("copied")));else prompt(T("copyp")+":",d.url)}
+function start(){const pool=[];(s.lv==="todas"?["facil","intermedio","dificil"]:[s.lv]).forEach(l=>DES.es[l].forEach((_,i)=>pool.push({l,i})));s.dis=shuffle(pool)[0];s.imp=shuffle([...Array(s.n).keys()]).slice(0,s.k);s.st=Math.floor(Math.random()*s.n);
 Object.assign(s,{ph:"reveal",i:0,rv:false,sr:false,sec:s.t,run:false,rs:false,win:null,dl:[]});s.round++;clearInterval(iv);save();render()}
 function next(){if(s.i+1<s.n){s.i++;s.rv=false}else s.ph="ready";render()}
 function ringCol(){return s.sec<=10?"#E5484D":s.sec/s.t<.34?"#E0B050":"#ECEAE4"}
 function upd(){const t=$("tm");if(!t)return;t.textContent=fmt(s.sec);t.style.color=ringCol();const r=$("rg");r.setAttribute("stroke",ringCol());r.setAttribute("stroke-dashoffset",553*(1-s.sec/s.t))}
 function tick(){s.sec--;if(s.sec<=0){s.sec=0;clearInterval(iv);s.run=false;try{navigator.vibrate&&navigator.vibrate([300,100,300])}catch(e){}render()}else upd()}
-function tog(){if(s.sec<=0)return;s.run=!s.run;clearInterval(iv);if(s.run)iv=setInterval(tick,1000);$("tg").innerHTML=s.run?ic("pause")+" Pausar":ic("play")+" Iniciar"}
+function tog(){if(s.sec<=0)return;s.run=!s.run;clearInterval(iv);if(s.run)iv=setInterval(tick,1000);$("tg").innerHTML=s.run?ic("pause")+" "+T("pause"):ic("play")+" "+T("go")}
 function pick(w){s.win=w;s.dl=s.sc.map((_,i)=>w==="crew"?(s.imp.includes(i)?0:1):(s.imp.includes(i)?2:0));s.sc=s.sc.map((v,i)=>v+s.dl[i]);save();render()}
 var render=function(){
 const M=$("main"),A=$("act");
-$("top").innerHTML=`<img src="icon-192.png" alt=""><b>Impostor Médico</b><div class="sp">${["reveal","ready","discussion","result"].includes(s.ph)?`<span class="chip">Ronda ${s.round}</span>`:""}<button class="ib" id="sh">${ic("share",16)}</button></div>`;
-on("sh",share);
-const pct=s.ph==="setup"?0:s.ph==="reveal"?(s.i+(s.rv?1:0))/s.n*100:100;
+$("top").innerHTML=`<img src="icon-192.png" alt=""><b>Impostor Médico</b><div class="sp">${s.ph==="lang"?"":`<button class="ib" id="lg" style="font:700 14px 'Barlow Condensed',sans-serif">${(s.lang||"es").toUpperCase()}</button>`}${["reveal","ready","discussion","result"].includes(s.ph)?`<span class="chip">${T("round")} ${s.round}</span>`:""}<button class="ib" id="sh">${ic("share",16)}</button></div>`;
+on("sh",share);on("lg",()=>{s.ph="lang";render()});document.documentElement.lang=s.lang||"es";
+const pct=(s.ph==="setup"||s.ph==="lang"||s.ph==="names")?0:s.ph==="reveal"?(s.i+(s.rv?1:0))/s.n*100:100;
 $("prog").innerHTML=`<i style="width:${pct}%"></i>`;
 
-if(s.ph==="setup"){
+if(s.ph==="lang"){
+M.innerHTML=`<div class="ct in">${bean("#E5484D",84)}<h1>Impostor Médico</h1><div class="lb">Idioma · Language</div></div>`;
+A.innerHTML=[["pt","Português"],["en","English"],["es","Español"]].map(x=>`<button class="btn ${s.lang===x[0]?"":"gh"}" data-l="${x[0]}">${x[1]}</button>`).join("");
+A.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{s.lang=b.dataset.l;save();s.ph="setup";render()});
+}else if(s.ph==="setup"){
 const any=s.sc.some(v=>v>0);
-M.innerHTML=`<div class="in"><div class="lb" style="margin-top:0">Partida</div><div class="pn">
-<div class="st">${ic("users")}<label>Jugadores</label><div class="num"><button id="nd">−</button><span>${s.n}</span><button id="ni">+</button></div></div>
-<div class="st">${bean("#E5484D",18)}<label>Impostores</label><div class="num"><button id="kd">−</button><span>${s.k}</span><button id="ki">+</button></div></div>
-<div class="st" style="border:0;padding-bottom:8px">${ic("bars")}<label>Dificultad</label></div><div class="seg">${Object.keys(LV).map(k=>`<button data-lv="${k}" class="${s.lv===k?"on":""}">${LV[k]}</button>`).join("")}</div>
-<div class="st" style="border:0;padding-bottom:8px">${ic("clock")}<label>Tiempo de debate</label></div><div class="seg">${[60,90,120,180].map(x=>`<button data-t="${x}" class="${s.t===x?"on":""}">${fmt(x).replace(/^0/,"")}</button>`).join("")}</div>
-</div><div class="row" style="margin-top:12px"><button class="btn gh sm" id="nms">Nombres</button>${any?`<button class="btn gh sm" id="rp">Reiniciar puntos</button>`:""}</div></div>`;
-A.innerHTML=`<button class="btn" id="go">${ic("play")} Jugar</button>`;
+M.innerHTML=`<div class="in"><div class="lb" style="margin-top:0">${T("game")}</div><div class="pn">
+<div class="st">${ic("users")}<label>${T("players")}</label><div class="num"><button id="nd">−</button><span>${s.n}</span><button id="ni">+</button></div></div>
+<div class="st">${bean("#E5484D",18)}<label>${T("imps")}</label><div class="num"><button id="kd">−</button><span>${s.k}</span><button id="ki">+</button></div></div>
+<div class="st" style="border:0;padding-bottom:8px">${ic("bars")}<label>${T("diff")}</label></div><div class="seg">${Object.keys(LV).map(k=>`<button data-lv="${k}" class="${s.lv===k?"on":""}">${T(LV[k])}</button>`).join("")}</div>
+<div class="st" style="border:0;padding-bottom:8px">${ic("clock")}<label>${T("time")}</label></div><div class="seg">${[60,90,120,180].map(x=>`<button data-t="${x}" class="${s.t===x?"on":""}">${fmt(x).replace(/^0/,"")}</button>`).join("")}</div>
+</div><div class="row" style="margin-top:12px"><button class="btn gh sm" id="nms">${T("names")}</button>${any?`<button class="btn gh sm" id="rp">${T("resetp")}</button>`:""}</div></div>`;
+A.innerHTML=`<button class="btn" id="go">${ic("play")} ${T("play")}</button>`;
 on("nd",()=>{s.n=Math.max(4,s.n-1);fit();render()});on("ni",()=>{s.n=Math.min(14,s.n+1);fit();render()});
 on("kd",()=>{s.k=Math.max(1,s.k-1);render()});on("ki",()=>{s.k=Math.min(maxK(),s.k+1);render()});
 M.querySelectorAll("[data-lv]").forEach(b=>b.onclick=()=>{s.lv=b.dataset.lv;save();render()});
@@ -140,35 +156,35 @@ M.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{s.t=+b.dataset.t;save()
 on("nms",()=>{s.ph="names";render()});
 on("rp",()=>{s.sc=s.sc.map(()=>0);s.round=0;save();render()});on("go",start);
 }else if(s.ph==="names"){
-M.innerHTML=`<div class="in"><div class="lb" style="margin-top:0">Nombres de los jugadores</div><div class="ro">${s.names.map((n,i)=>`<div>${bean(COL[i],24)}<input data-i="${i}" value="${n.replace(/"/g,"&quot;")}" maxlength="14"></div>`).join("")}</div></div>`;
-A.innerHTML=`<button class="btn" id="a">Listo</button>`;
+M.innerHTML=`<div class="in"><div class="lb" style="margin-top:0">${T("namesT")}</div><div class="ro">${s.names.map((n,i)=>`<div>${bean(COL[i],24)}<input data-i="${i}" value="${isDef(n)?"":n.replace(/"/g,"&quot;")}" placeholder="${T("pl")} ${i+1}" maxlength="14"></div>`).join("")}</div></div>`;
+A.innerHTML=`<button class="btn" id="a">${T("done")}</button>`;
 M.querySelectorAll("input").forEach(e=>e.oninput=()=>{s.names[+e.dataset.i]=e.value;save()});on("a",()=>{s.ph="setup";render()});
 }else if(s.ph==="reveal"){
 const imp=s.imp.includes(s.i);
-M.innerHTML=`<div class="ct in"><div class="lb">Jugador ${s.i+1} de ${s.n}</div>${bean(COL[s.i],96)}<h1>${nm(s.i)}</h1>${!s.rv?`<p class="mu">Pásale el teléfono a ${nm(s.i)}. Nadie más debe mirar la pantalla.</p>`:imp?`<div class="card imp"><span class="tg r">Impostor</span><div class="big">Sin diagnóstico</div><p>No conoces la enfermedad. Escucha, improvisa y no te delates.</p></div>`:`<div class="card"><span class="tg">Médico</span><div class="big">${s.dis}</div><p>Da pistas sin decir el nombre. Ayuda a descubrir al impostor.</p></div>`}</div>`;
-A.innerHTML=!s.rv?`<button class="btn" id="a">${ic("eye")} Ver mi rol</button>`:`<button class="btn gh" id="a">${ic("eyeoff")} ${s.i+1<s.n?"Ocultar y pasar":"Ocultar y continuar"}</button>`;
+M.innerHTML=`<div class="ct in"><div class="lb">${T("pl")} ${s.i+1} ${T("of")} ${s.n}</div>${bean(COL[s.i],96)}<h1>${nm(s.i)}</h1>${!s.rv?`<p class="mu">${T("pass").replace("{x}",nm(s.i))}</p>`:imp?`<div class="card imp"><span class="tg r">${T("imp")}</span><div class="big">${T("nodiag")}</div><p>${T("impnote")}</p></div>`:`<div class="card"><span class="tg">${T("doc")}</span><div class="big">${DN()}</div><p>${T("docnote")}</p></div>`}</div>`;
+A.innerHTML=!s.rv?`<button class="btn" id="a">${ic("eye")} ${T("seerole")}</button>`:`<button class="btn gh" id="a">${ic("eyeoff")} ${s.i+1<s.n?T("hidepass"):T("hidecont")}</button>`;
 on("a",()=>{if(!s.rv){s.rv=true;render()}else next()});
 }else if(s.ph==="ready"){
-M.innerHTML=`<div class="ct in"><div class="lb">Roles repartidos</div><div class="sq">${s.names.map((_,i)=>bean(COL[i],30)).join("")}</div>${!s.sr?`<h1>Todos listos</h1><p class="mu">Cuando todos estén atentos, toquen Comenzar para saber quién abre la ronda.</p>`:`<div class="lb" style="margin-top:10px">Abre la ronda</div>${bean(COL[s.st],104)}<h1>${nm(s.st)}</h1><p class="mu">Después se sigue en orden, hacia la derecha.</p>`}</div>`;
-A.innerHTML=!s.sr?`<button class="btn" id="a">${ic("play")} Comenzar</button>`:`<button class="btn" id="a">Ir al debate ${ic("arrow")}</button>`;
+M.innerHTML=`<div class="ct in"><div class="lb">${T("rolesdone")}</div><div class="sq">${s.names.map((_,i)=>bean(COL[i],30)).join("")}</div>${!s.sr?`<h1>${T("allready")}</h1><p class="mu">${T("readyp")}</p>`:`<div class="lb" style="margin-top:10px">${T("opens")}</div>${bean(COL[s.st],104)}<h1>${nm(s.st)}</h1><p class="mu">${T("after")}</p>`}</div>`;
+A.innerHTML=!s.sr?`<button class="btn" id="a">${ic("play")} ${T("start")}</button>`:`<button class="btn" id="a">${T("todebate")} ${ic("arrow")}</button>`;
 on("a",()=>{if(!s.sr)s.sr=true;else s.ph="discussion";render()});
 }else if(s.ph==="discussion"){
 const f=s.sec/s.t;
-M.innerHTML=`<div class="ct in"><div class="lb">Debate</div><div class="rg"><svg viewBox="0 0 200 200" width="220" height="220"><circle cx="100" cy="100" r="88" fill="none" stroke="#272B34" stroke-width="10"/><circle id="rg" cx="100" cy="100" r="88" fill="none" stroke="${ringCol()}" stroke-width="10" stroke-linecap="round" stroke-dasharray="553" stroke-dashoffset="${553*(1-f)}" transform="rotate(-90 100 100)"/></svg><div class="tm" id="tm" style="color:${ringCol()}">${fmt(s.sec)}</div></div><span class="chip" style="color:var(--tx)">Abre ${bean(COL[s.st],18)} ${nm(s.st)}</span><p class="mu">${s.sec===0?"¡Tiempo! Voten ahora, a la cuenta de tres.":"Una pista por turno. Nadie dice el nombre de la enfermedad."}</p></div>`;
-A.innerHTML=`<div class="row"><button class="btn" id="tg">${s.run?ic("pause")+" Pausar":ic("play")+" Iniciar"}</button><button class="btn gh" id="rt" style="flex:0 0 58px">${ic("reset")}</button></div><button class="btn rd" id="vt">Votar</button>`;
+M.innerHTML=`<div class="ct in"><div class="lb">${T("debate")}</div><div class="rg"><svg viewBox="0 0 200 200" width="220" height="220"><circle cx="100" cy="100" r="88" fill="none" stroke="#272B34" stroke-width="10"/><circle id="rg" cx="100" cy="100" r="88" fill="none" stroke="${ringCol()}" stroke-width="10" stroke-linecap="round" stroke-dasharray="553" stroke-dashoffset="${553*(1-f)}" transform="rotate(-90 100 100)"/></svg><div class="tm" id="tm" style="color:${ringCol()}">${fmt(s.sec)}</div></div><span class="chip" style="color:var(--tx)">${T("opensS")} ${bean(COL[s.st],18)} ${nm(s.st)}</span><p class="mu">${s.sec===0?T("timeup"):T("hint")}</p></div>`;
+A.innerHTML=`<div class="row"><button class="btn" id="tg">${s.run?ic("pause")+" Pausar":ic("play")+" Iniciar"}</button><button class="btn gh" id="rt" style="flex:0 0 58px">${ic("reset")}</button></div><button class="btn rd" id="vt">${T("vote")}</button>`;
 on("tg",tog);on("rt",()=>{clearInterval(iv);s.sec=s.t;s.run=false;render()});on("vt",()=>{clearInterval(iv);s.run=false;s.ph="result";render()});
 }else if(s.ph==="result"){
 if(!s.rs){
-M.innerHTML=`<div class="ct in"><div class="lb">Votación</div><h1>¿Quién es el impostor?</h1><p class="mu">A la cuenta de tres, todos señalan a quien creen impostor. Después, revelen.</p></div>`;
-A.innerHTML=`<button class="btn rd" id="a">Revelar</button>`;on("a",()=>{s.rs=true;render()});
+M.innerHTML=`<div class="ct in"><div class="lb">${T("voting")}</div><h1>${T("who")}</h1><p class="mu">${T("votep")}</p></div>`;
+A.innerHTML=`<button class="btn rd" id="a">${T("reveal")}</button>`;on("a",()=>{s.rs=true;render()});
 }else if(s.win===null){
-M.innerHTML=`<div class="in"><div class="lb" style="margin-top:0">${s.k>1?"Los impostores eran":"El impostor era"}</div><div class="pn">${s.imp.map(i=>`<div class="st">${bean(COL[i],30)}<span class="nmx">${nm(i)}</span><span class="tg r">Impostor</span></div>`).join("")}</div><div class="lb">La enfermedad era</div><div class="card"><span class="tg">Diagnóstico</span><div class="big">${s.dis}</div></div><div class="lb">¿Quién ganó?</div></div>`;
-A.innerHTML=`<button class="btn gn" id="c">Ganaron los médicos · +1</button><button class="btn rd" id="m">${s.k>1?"Ganaron los impostores":"Ganó el impostor"} · +2</button>`;
+M.innerHTML=`<div class="in"><div class="lb" style="margin-top:0">${s.k>1?T("wereimps"):T("wasimp")}</div><div class="pn">${s.imp.map(i=>`<div class="st">${bean(COL[i],30)}<span class="nmx">${nm(i)}</span><span class="tg r">Impostor</span></div>`).join("")}</div><div class="lb">${T("diswas")}</div><div class="card"><span class="tg">${T("dx")}</span><div class="big">${DN()}</div></div><div class="lb">${T("whowon")}</div></div>`;
+A.innerHTML=`<button class="btn gn" id="c">${T("docswon")} · +1</button><button class="btn rd" id="m">${s.k>1?T("impswon"):T("impwon")} · +2</button>`;
 on("c",()=>pick("crew"));on("m",()=>pick("imp"));
 }else{
 const ord=s.sc.map((v,i)=>i).sort((a,b)=>s.sc[b]-s.sc[a]);
-M.innerHTML=`<div class="in"><div class="lb" style="margin-top:0">${s.win==="crew"?"Ganaron los médicos":s.k>1?"Ganaron los impostores":"Ganó el impostor"}</div><div class="rb" style="grid-template-columns:repeat(${s.n>7?2:1},minmax(0,1fr))">${ord.map((i,r)=>`<div class="rw"><span class="rk" style="${r===0?"color:var(--gd)":""}">${r+1}</span>${bean(COL[i],s.n>7?22:28)}<span class="nmx">${nm(i)}</span>${s.dl[i]?`<span class="dl">+${s.dl[i]}</span>`:""}<span class="pt">${s.sc[i]}</span></div>`).join("")}</div></div>`;
-A.innerHTML=`<button class="btn" id="a">Siguiente ronda ${ic("arrow")}</button><button class="btn gh" id="b">Menú</button>`;
+M.innerHTML=`<div class="in"><div class="lb" style="margin-top:0">${s.win==="crew"?T("docswon"):s.k>1?T("impswon"):T("impwon")}</div><div class="rb" style="grid-template-columns:repeat(${s.n>7?2:1},minmax(0,1fr))">${ord.map((i,r)=>`<div class="rw"><span class="rk" style="${r===0?"color:var(--gd)":""}">${r+1}</span>${bean(COL[i],s.n>7?22:28)}<span class="nmx">${nm(i)}</span>${s.dl[i]?`<span class="dl">+${s.dl[i]}</span>`:""}<span class="pt">${s.sc[i]}</span></div>`).join("")}</div></div>`;
+A.innerHTML=`<button class="btn" id="a">${T("next")} ${ic("arrow")}</button><button class="btn gh" id="b">${T("menu")}</button>`;
 on("a",start);on("b",()=>{s.ph="setup";render()});
 }}
 }
